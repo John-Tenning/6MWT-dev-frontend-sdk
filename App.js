@@ -1,47 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "./screens/LoginScreen";
+import { useFonts } from "expo-font";
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  const [loaded] = useFonts({
+    Poppins: require("./assets/fonts/Poppins-Regular.ttf"),
+  });
+
+  // if (!loaded) {
+  //   return null;
+  // }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-// import { createBottomTabNavigator } from 'react-navigation-tabs'
-// //example home screen
-// const HomeScreen = (props) => {
-//   return (
-//     <View>
-//        <Text>Hello from home screen</Text>
-//     </View>
-//   );
-// }
-// const bottomTabNav = createBottomTabNavigator(
-// {
-//    HomeScreen: {
-//     screen: HomeScreen
-//    },
-//    AddScreen: {
-//     screen: AddScreen
-//    },
-//    SettingsScreen: {
-//     screen: SettingsScreen
-//    },
-//    //add other tabs here
-// },
-// {
-//    initialRouteName: 'HomeScreen' //Name of the preselected tab
-// }
-// )
+export default App;
