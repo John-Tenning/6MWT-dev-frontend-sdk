@@ -1,6 +1,7 @@
 import {
   Alert,
   Image,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -29,7 +30,10 @@ const LoginScreen = ({ navigation }) => {
           style={styles.button}
           onPress={() => {
             console.log("sdfgiusdhki");
-            ToastAndroid.show("Login Successful", ToastAndroid.SHORT);
+            if (Platform.OS === "android") {
+              ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
+            }
+            navigation.navigate("Forms");
           }}
         >
           <Text style={styles.buttonText}>Login</Text>
