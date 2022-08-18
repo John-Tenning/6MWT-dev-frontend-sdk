@@ -8,19 +8,26 @@ import {
   TextInput,
   ToastAndroid,
   View,
-} from "react-native";
-import React from "react";
+  Button,
+} from 'react-native';
+import React, { useState } from "react";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 const LoginScreen = ({ navigation }) => {
+  const [user, setuser] = useState("")
+  const [pass, setpass] = useState("")
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.heading}>Login</Text>
           <Text style={styles.subtext}>Login to use the app.</Text>
-          <TextInput placeholder="Username" style={styles.input} />
+          <TextInput value={user} onChangeText={text => setuser(text)} placeholderTextColor="grey" placeholder="Username" style={styles.input} />
           <TextInput
+            value={pass}
+            onChangeText={text => setpass(text)}
+            placeholderTextColor="grey"
             placeholder="Password"
             secureTextEntry
             style={styles.input}
@@ -29,7 +36,8 @@ const LoginScreen = ({ navigation }) => {
         <Pressable
           style={styles.button}
           onPress={() => {
-            console.log("sdfgiusdhki");
+            console.log(`UserName: ${user}`);
+            console.log(`Password: ${pass}`);
             if (Platform.OS === "android") {
               ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
             }
@@ -60,7 +68,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 48,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     fontWeight: "bold",
     color: "#fff",
     width: "100%",
@@ -68,7 +76,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#fff",
     fontSize: 14,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     marginTop: 8,
     marginBottom: 32,
   },
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 16,
     fontSize: 20,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     color: "#fff",
   },
   button: {
@@ -96,7 +104,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 24,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     color: "#2A2A2A",
     fontWeight: "bold",
   },

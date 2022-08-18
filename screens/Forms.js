@@ -7,57 +7,69 @@ import {
   TextInput,
   ToastAndroid,
   View,
-  Picker,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useState } from 'react';
 import EStyleSheet from "react-native-extended-stylesheet";
+import { Dropdown } from 'react-native-element-dropdown';
 
 const Forms = ({ navigation }) => {
+  const [diagnosis, setDiagnosis] = useState(null)
+  const [gender, setGender] = useState(null);
+  const [patientID, setPatientID] = useState("")
+  const [name, setname] = useState("")
+  const [age, setage] = useState(null)
+  const [weight, setweight] = useState(null)
+  const [height, setheight] = useState(null)
+  const [bmi, setbmi] = useState(null)
+  const [diag, setdiag] = useState("")
+
+  const genderOptions = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+  ];
+  const diagnosisOptions = [
+    { label: 'Yes', value: 'yes' },
+    { label: 'No', value: 'no' },
+  ];
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.heading}>Forms</Text>
           <Text style={styles.subtext}>Login to use the app.</Text>
-          <TextInput placeholder="Patient Id" style={styles.input} />
-          <TextInput placeholder="Name" style={styles.input} />
+          <TextInput value={patientID} onChangeText={text => setPatientID(text)} placeholderTextColor="grey" placeholder="Patient Id" style={styles.input} />
+          <TextInput value={name} onChangeText={text => setname(text)} placeholderTextColor="grey" placeholder="Name" style={styles.input} />
           <View style={styles.align}>
-            <TextInput placeholder="Age" style={styles.input} />
-            <Picker style={[styles.picker, styles.right]}>
-              <Picker.Item
-                label="Select"
-                value="Select"
-                style={styles.pikitem}
-              />
-              <Picker.Item label="Male" value="Male" />
-              <Picker.Item label="Female" value="Female" />
-            </Picker>
+            <TextInput value={age} onChangeText={text => setage(text)} placeholderTextColor="grey" placeholder="Age" style={[styles.input, { width: "49%", marginRight: 3 }]} />
+            <CustomDropdown placeholder={"Gender"} options={genderOptions} valueState={[gender, setGender]} />
           </View>
           <View style={styles.align}>
-            <TextInput placeholder="Weight" style={styles.input} />
-            <TextInput
-              placeholder="Height"
-              style={[styles.input, styles.right]}
-            />
+            <TextInput value={weight} onChangeText={text => setweight(text)} placeholderTextColor="grey" placeholder="Weight" style={[styles.input, {width: "49%", marginRight: 8 }]} />
+            <TextInput value={height} onChangeText={text => setheight(text)} placeholderTextColor="grey" placeholder="Height" style={[styles.input, { width: "49%"}]} />
           </View>
           <View>
-            <TextInput placeholder="BMI" style={styles.input} />
-            <TextInput placeholder="Diagnosis" style={styles.input} />
+            <TextInput value={bmi} onChangeText={text => setbmi(text)} placeholderTextColor="grey" placeholder="BMI" style={styles.input} />
+            <TextInput value={diag} onChangeText={text => setdiag(text)} placeholderTextColor="grey" placeholder="Diagnosis" style={styles.input} />
           </View>
-          <Picker style={styles.picker}>
-            <Picker.Item label="Medical Diagnosis" value="Medical Diagnosis" style={styles.pikitem} />
-            <Picker.Item label="Yes" value="Yes" />
-            <Picker.Item label="No" value="No" />
-          </Picker>
+          <CustomDropdown isBig placeholder={"Medical Diagnosis"} options={diagnosisOptions} valueState={[diagnosis, setDiagnosis]} />
         </View>
         <Pressable
           style={styles.button}
           onPress={() => {
-            console.log("sdfgiusdhki");
+            console.log("Patient ID: " + patientID);
+            console.log("Name: " + name);
+            console.log("Age: " + age);
+            console.log(`Gender: ${gender}`);
+            console.log("Weight: " + weight);
+            console.log("Height: " + height);
+            console.log("BMI: " + bmi);
+            console.log("Diagnosis: " + diag);
+            console.log(`Medical Diagnosis: ${diagnosis}`);
             // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
-          }}
-        >
+            navigation.navigate("Timer");
+          }}>
           <Text style={styles.buttonText}>Submit</Text>
         </Pressable>
       </View>
@@ -67,11 +79,35 @@ const Forms = ({ navigation }) => {
 
 export default Forms;
 
+const CustomDropdown = ({ valueState = [], options, placeholder, isBig = false }) => {
+
+  const [value, setValue] = valueState;
+  const [isFocus, setIsFocus] = useState(false);
+
+  return <Dropdown
+    style={isBig ? styles.dropdownBig : styles.dropdown}
+    containerStyle={isBig ? styles.dropdownItemsBig : styles.dropdownItems}
+    placeholderStyle={styles.placeholderStyle}
+    selectedTextStyle={styles.selectedTextStyle}
+    data={options}
+    maxHeight={300}
+    labelField="label"
+    valueField="value"
+    placeholder={!isFocus ? placeholder : '...'}
+    value={value}
+    onFocus={() => setIsFocus(true)}
+    onBlur={() => setIsFocus(false)}
+    onChange={item => {
+      setValue(item.value);
+      setIsFocus(false);
+    }}
+  />
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2A2A2A",
-    overflow: "hidden",
   },
   wrapper: {
     paddingHorizontal: 16,
@@ -82,7 +118,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 48,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     fontWeight: "bold",
     color: "#fff",
     width: "100%",
@@ -90,7 +126,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#fff",
     fontSize: 14,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     marginTop: 8,
     marginBottom: 32,
   },
@@ -102,7 +138,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 16,
     fontSize: 20,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     color: "#fff",
   },
   button: {
@@ -115,27 +151,13 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
-    marginTop : 20,
+    marginTop: 20,
   },
   buttonText: {
     fontSize: 24,
-    fontFamily: "Poppins",
+    fontFamily: "Arial",
     color: "#2A2A2A",
     fontWeight: "bold",
-  },
-  picker: {
-    marginVertical: 16,
-    width: 360,
-    height: 64,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: "white",
-    color: "#fff",
-    borderRadius: 16,
-    backgroundColor: "#2A2A2A",
-
-    fontSize: 20,
-    fontFamily: "Poppins",
   },
   align: {
     display: "flex",
@@ -143,7 +165,51 @@ const styles = StyleSheet.create({
     // marginLeft: 16,
   },
   right: {
+    marginLeft: 8,
+  },
 
-    marginLeft: 16,
+  dropdown: {
+    borderColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    width: "49%",
+    marginLeft: 6,
+    marginVertical: 16,
+  },
+  dropdownItems: {
+    borderColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    width: "46%",
+    marginVertical: 3,
+    backgroundColor: "#fff",
+  },
+  dropdownBig: {
+    height: 60,
+    borderColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    width: "100%",
+    marginVertical: 16,
+  },
+  dropdownItemsBig: {
+    borderColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    width: "100%",
+    marginVertical: 3,
+    backgroundColor: "#fff",
+  },
+  placeholderStyle: {
+    color: 'grey',
+    fontSize: 20,
+  },
+  selectedTextStyle: {
+    fontSize: 20,
+    color: '#fff',
   },
 });
