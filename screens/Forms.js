@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 48,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     fontWeight: "bold",
     color: "#fff",
     width: "100%",
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#fff",
     fontSize: 14,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     marginTop: 8,
     marginBottom: 32,
   },
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 16,
     fontSize: 20,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     color: "#fff",
   },
   button: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 24,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     color: "#2A2A2A",
     fontWeight: "bold",
   },

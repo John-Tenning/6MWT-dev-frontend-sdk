@@ -30,6 +30,7 @@ const TimerScreen = ({ navigation }) => {
         </View>
         <View style={styles.timer}>
           <CountdownCircleTimer
+            size={300}
             isPlaying={isPlaying}
             key={key}
             duration={30}
@@ -45,14 +46,31 @@ const TimerScreen = ({ navigation }) => {
           >
             {({ remainingTime, color }) => (
               <View style={styles.timer}>
-                <Text style={{ color, fontSize: 50 }}>
+                <Text style={{ color, fontSize: 70 }}>
                   {remainingTime}
                 </Text>
-                <Button
-                  color={color}
-                  title={isPlaying === false ? 'Play' : 'Pause'}
-                  onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
-                />
+                <View style={styles.timerButtons}>
+                  <Pressable
+                    style={styles.smallButton}
+                    onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
+                  >
+                    <Text style={styles.smallButtonText}>
+                      {isPlaying === false ? 'Play' : 'Pause'}
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.smallButton}
+                    onPress={() => {
+                      setKey(prevKey => prevKey + 1)
+                      setIsPlaying(false)
+                      console.log("Reset")
+                    }}
+                  >
+                    <Text style={styles.smallButtonText}>
+                      Reset
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             )}
           </CountdownCircleTimer>
@@ -89,7 +107,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 48,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     fontWeight: "bold",
     color: "#fff",
     width: "100%",
@@ -97,7 +115,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#fff",
     fontSize: 14,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     marginTop: 8,
     marginBottom: 32,
   },
@@ -112,13 +130,34 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 5,
   },
+  smallButton: {
+    width: "30%",
+    backgroundColor: "#E6F5FC",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    padding: 10,
+    borderRadius: 20,
+    elevation: 5,
+    margin: 5,
+    marginTop: 15,
+  },
   buttonText: {
     fontSize: 24,
-    fontFamily: "Arial",
+    fontFamily: "Poppins",
     color: "#2A2A2A",
     fontWeight: "bold",
   },
+  smallButtonText: {
+    fontSize: 16,
+    color: "#2A2A2A",
+  },
   timer: {
     alignItems: "center",
+  },
+  timerButtons: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row"
   },
 });
