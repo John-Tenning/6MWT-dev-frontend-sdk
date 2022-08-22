@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   View,
   Button,
+  ScrollView,
 } from 'react-native';
 import React, { useState } from "react";
 import EStyleSheet from "react-native-extended-stylesheet";
@@ -18,62 +19,24 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // Refernce: https://www.npmjs.com/package/react-native-vector-icons#ios
 
 const TimerScreen = ({ navigation }) => {
-  const [isPlaying, setIsPlaying] = useState(true)
-  const [key, setKey] = useState(0)
-
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.heading}>Timer</Text>
           <Text style={styles.subtext}>First Timer Screen - 30 Seconds</Text>
         </View>
-        <View style={styles.timer}>
-          <CountdownCircleTimer
-            size={300}
-            isPlaying={isPlaying}
-            key={key}
-            duration={30}
-            colors={['#00FF54', '#D9FF4E', '#FF6C25', '#FF0017']}
-            colorsTime={[30, 20, 10, 0]}
-            onComplete={() => {
-              // return { shouldRepeat: true, delay: 1.5 }
-              setKey(prevKey => prevKey + 1)
-              setIsPlaying(false)
-              console.log("Done")
-              Alert.alert('Timer Complete')
-            }}
-          >
-            {({ remainingTime, color }) => (
-              <View style={styles.timer}>
-                <Text style={{ color, fontSize: 70 }}>
-                  {remainingTime}
-                </Text>
-                <View style={styles.timerButtons}>
-                  <Pressable
-                    style={styles.smallButton}
-                    onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
-                  >
-                    <Text style={styles.smallButtonText}>
-                      {isPlaying === false ? 'Play' : 'Pause'}
-                    </Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.smallButton}
-                    onPress={() => {
-                      setKey(prevKey => prevKey + 1)
-                      setIsPlaying(false)
-                      console.log("Reset")
-                    }}
-                  >
-                    <Text style={styles.smallButtonText}>
-                      Reset
-                    </Text>
-                  </Pressable>
-                </View>
-              </View>
-            )}
-          </CountdownCircleTimer>
+
+        <View style={[{ marginVertical: 20 }]}>
+          <CustomTimer dur={60} />
+        </View>
+
+        <View style={[{ marginVertical: 20 }]}>
+          <CustomTimer dur={120} />
+        </View>
+
+        <View style={[{ marginVertical: 20 }]}>
+          <CustomTimer dur={180} />
         </View>
 
         <Pressable
@@ -86,17 +49,73 @@ const TimerScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Next</Text>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default TimerScreen;
 
+const CustomTimer = ({ dur }) => {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [key, setKey] = useState(0)
+
+  return <View style={styles.timer}>
+    <View style={styles.timerName}>
+      <Text style={styles.subtext}>Timer 1</Text>
+      <View style={styles.timer}>
+        <Pressable
+          style={styles.smallButton}
+          onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
+        >
+          <Text style={styles.smallButtonText}>
+            {isPlaying === false ? 'Play' : 'Pause'}
+          </Text>
+        </Pressable>
+        <Pressable
+          style={styles.smallButton}
+          onPress={() => {
+            setKey(prevKey => prevKey + 1)
+            setIsPlaying(false)
+            console.log("Reset")
+          }}
+        >
+          <Text style={styles.smallButtonText}>
+            Reset
+          </Text>
+        </Pressable>
+      </View>
+    </View>
+
+    <CountdownCircleTimer
+      size={128}
+      isPlaying={isPlaying}
+      key={key}
+      duration={dur}
+      colors={['#00FF54', '#D9FF4E', '#FF6C25', '#FF0017']}
+      colorsTime={[dur, dur * (2 / 3), dur * (1 / 3), 0]}
+      onComplete={() => {
+        // return { shouldRepeat: true, delay: 1.5 }
+        setKey(prevKey => prevKey + 1)
+        setIsPlaying(false)
+        console.log("Done")
+        Alert.alert('Timer Complete')
+      }}
+    >
+      {({ remainingTime, color }) => (
+        <View style={styles.timerText}>
+          <Text style={{ color, fontSize: 32 }}>
+            {remainingTime}
+          </Text>
+        </View>
+      )}
+    </CountdownCircleTimer>
+  </View>
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2A2A2A",
-    overflow: "hidden",
   },
   wrapper: {
     paddingHorizontal: 16,
@@ -129,9 +148,10 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
+    marginTop: 10,
   },
   smallButton: {
-    width: "30%",
+    width: "24%",
     backgroundColor: "#E6F5FC",
     justifyContent: "center",
     alignItems: "center",
@@ -140,7 +160,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 5,
     margin: 5,
-    marginTop: 15,
   },
   buttonText: {
     fontSize: 24,
@@ -149,15 +168,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   smallButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#2A2A2A",
   },
   timer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
+  },
+  timerText: {
     alignItems: "center",
   },
-  timerButtons: {
-    alignItems: "center",
-    display: "flex",
-    flexDirection: "row"
+  timerName: {
+    width: "70%",
   },
 });
