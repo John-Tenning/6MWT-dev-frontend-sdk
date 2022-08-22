@@ -24,19 +24,19 @@ const TimerScreen = ({ navigation }) => {
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.heading}>Timer</Text>
-          <Text style={styles.subtext}>First Timer Screen - 30 Seconds</Text>
+          <Text style={styles.subtext}>Timer Screen</Text>
         </View>
 
         <View style={[{ marginVertical: 20 }]}>
-          <CustomTimer dur={60} />
+          <CustomTimer dur={60} timerName={'First'}/>
         </View>
 
         <View style={[{ marginVertical: 20 }]}>
-          <CustomTimer dur={120} />
+          <CustomTimer dur={120} timerName={'Second'}/>
         </View>
 
         <View style={[{ marginVertical: 20 }]}>
-          <CustomTimer dur={180} />
+          <CustomTimer dur={180} timerName={'Third'}/>
         </View>
 
         <Pressable
@@ -55,14 +55,14 @@ const TimerScreen = ({ navigation }) => {
 
 export default TimerScreen;
 
-const CustomTimer = ({ dur }) => {
+const CustomTimer = ({ dur, timerName }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [key, setKey] = useState(0)
 
   return <View style={styles.timer}>
-    <View style={styles.timerName}>
-      <Text style={styles.subtext}>Timer 1</Text>
-      <View style={styles.timer}>
+    <View>
+      <Text style={styles.timerNameText}>{timerName} Timer</Text>
+      <View style={styles.timerButtons}>
         <Pressable
           style={styles.smallButton}
           onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
@@ -98,7 +98,7 @@ const CustomTimer = ({ dur }) => {
         setKey(prevKey => prevKey + 1)
         setIsPlaying(false)
         console.log("Done")
-        Alert.alert('Timer Complete')
+        Alert.alert(timerName + ' Timer Complete')
       }}
     >
       {({ remainingTime, color }) => (
@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     marginTop: 8,
     marginBottom: 32,
+    marginLeft: 8,
   },
   button: {
     width: "100%",
@@ -148,10 +149,10 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
-    marginTop: 10,
+    marginTop: 32,
   },
   smallButton: {
-    width: "24%",
+    width: "32%",
     backgroundColor: "#E6F5FC",
     justifyContent: "center",
     alignItems: "center",
@@ -177,10 +178,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "90%",
   },
-  timerText: {
+  timerButtons: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
   },
-  timerName: {
-    width: "70%",
+  timerNameText: {
+    color: "#fff",
+    fontSize: 20,
+    fontFamily: "Poppins",
+    marginTop: 8,
+    marginBottom: 32,
+    marginLeft: 8,
+  },
+  timerText: {
+    alignItems: "center",
   },
 });
