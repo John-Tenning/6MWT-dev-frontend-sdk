@@ -14,10 +14,6 @@ const App = () => {
     Poppins: require("./assets/fonts/Poppins-Regular.ttf"),
   });
 
-  // if (!loaded) {
-  //   return null;
-  // }
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>

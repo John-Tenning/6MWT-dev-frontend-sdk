@@ -9,17 +9,17 @@ import {
   ToastAndroid,
   View,
   Button,
-} from 'react-native';
+} from "react-native";
 import React, { useState } from "react";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 // Reference: https://openbase.com/js/react-native-countdown-circle-timer
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from "react-native-vector-icons/FontAwesome";
 // Refernce: https://www.npmjs.com/package/react-native-vector-icons#ios
 
 const TimerScreen = ({ navigation }) => {
-  const [isPlaying, setIsPlaying] = useState(true)
-  const [key, setKey] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [key, setKey] = useState(0);
 
   return (
     <View style={styles.container}>
@@ -34,41 +34,41 @@ const TimerScreen = ({ navigation }) => {
             isPlaying={isPlaying}
             key={key}
             duration={30}
-            colors={['#00FF54', '#D9FF4E', '#FF6C25', '#FF0017']}
+            colors={["#00FF54", "#D9FF4E", "#FF6C25", "#FF0017"]}
             colorsTime={[30, 20, 10, 0]}
             onComplete={() => {
               // return { shouldRepeat: true, delay: 1.5 }
-              setKey(prevKey => prevKey + 1)
-              setIsPlaying(false)
-              console.log("Done")
-              Alert.alert('Timer Complete')
+              setKey((prevKey) => prevKey + 1);
+              setIsPlaying(false);
+              console.log("Done");
+              Alert.alert("Timer Complete");
             }}
           >
             {({ remainingTime, color }) => (
               <View style={styles.timer}>
-                <Text style={{ color, fontSize: 70 }}>
-                  {remainingTime}
-                </Text>
+                <Text style={{ color, fontSize: 70 }}>{remainingTime}</Text>
                 <View style={styles.timerButtons}>
                   <Pressable
                     style={styles.smallButton}
-                    onPress={isPlaying === false ? () => setIsPlaying(true) : () => setIsPlaying(false)}
+                    onPress={
+                      isPlaying === false
+                        ? () => setIsPlaying(true)
+                        : () => setIsPlaying(false)
+                    }
                   >
                     <Text style={styles.smallButtonText}>
-                      {isPlaying === false ? 'Play' : 'Pause'}
+                      {isPlaying === false ? "Play" : "Pause"}
                     </Text>
                   </Pressable>
                   <Pressable
                     style={styles.smallButton}
                     onPress={() => {
-                      setKey(prevKey => prevKey + 1)
-                      setIsPlaying(false)
-                      console.log("Reset")
+                      setKey((prevKey) => prevKey + 1);
+                      setIsPlaying(false);
+                      console.log("Reset");
                     }}
                   >
-                    <Text style={styles.smallButtonText}>
-                      Reset
-                    </Text>
+                    <Text style={styles.smallButtonText}>Reset</Text>
                   </Pressable>
                 </View>
               </View>
@@ -158,6 +158,6 @@ const styles = StyleSheet.create({
   timerButtons: {
     alignItems: "center",
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
   },
 });

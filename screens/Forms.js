@@ -9,28 +9,30 @@ import {
   View,
   ScrollView,
 } from "react-native";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { Dropdown } from 'react-native-element-dropdown';
+import { Dropdown } from "react-native-element-dropdown";
+import { useFonts } from "expo-font";
+import CustomTextInput from "../components/CustomTextInput";
 
 const Forms = ({ navigation }) => {
-  const [diagnosis, setDiagnosis] = useState(null)
+  const [diagnosis, setDiagnosis] = useState(null);
   const [gender, setGender] = useState(null);
-  const [patientID, setPatientID] = useState("")
-  const [name, setname] = useState("")
-  const [age, setage] = useState(null)
-  const [weight, setweight] = useState(null)
-  const [height, setheight] = useState(null)
-  const [bmi, setbmi] = useState(null)
-  const [diag, setdiag] = useState("")
+  const [patientID, setPatientID] = useState("");
+  const [name, setname] = useState("");
+  const [age, setage] = useState(null);
+  const [weight, setweight] = useState(null);
+  const [height, setheight] = useState(null);
+  const [bmi, setbmi] = useState(null);
+  const [diag, setdiag] = useState("");
 
   const genderOptions = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
   ];
   const diagnosisOptions = [
-    { label: 'Yes', value: 'yes' },
-    { label: 'No', value: 'no' },
+    { label: "Yes", value: "yes" },
+    { label: "No", value: "no" },
   ];
 
   return (
@@ -39,21 +41,59 @@ const Forms = ({ navigation }) => {
         <View>
           <Text style={styles.heading}>Forms</Text>
           <Text style={styles.subtext}>Login to use the app.</Text>
-          <TextInput value={patientID} onChangeText={text => setPatientID(text)} placeholderTextColor="grey" placeholder="Patient Id" style={styles.input} />
-          <TextInput value={name} onChangeText={text => setname(text)} placeholderTextColor="grey" placeholder="Name" style={styles.input} />
+          <CustomTextInput valueState={[patientID, setPatientID]} placeholder="Patient ID"/>
           <View style={styles.align}>
-            <TextInput value={age} onChangeText={text => setage(text)} placeholderTextColor="grey" placeholder="Age" style={[styles.input, { width: "49%", marginRight: 3 }]} />
-            <CustomDropdown placeholder={"Gender"} options={genderOptions} valueState={[gender, setGender]} />
+            <TextInput
+              value={age}
+              onChangeText={(text) => setage(text)}
+              placeholderTextColor="grey"
+              placeholder="Age"
+              style={[styles.input, { width: "49%", marginRight: 3 }]}
+            />
+            <CustomDropdown
+              placeholder={"Gender"}
+              options={genderOptions}
+              valueState={[gender, setGender]}
+            />
           </View>
           <View style={styles.align}>
-            <TextInput value={weight} onChangeText={text => setweight(text)} placeholderTextColor="grey" placeholder="Weight" style={[styles.input, {width: "49%", marginRight: 8 }]} />
-            <TextInput value={height} onChangeText={text => setheight(text)} placeholderTextColor="grey" placeholder="Height" style={[styles.input, { width: "49%"}]} />
+            <TextInput
+              value={weight}
+              onChangeText={(text) => setweight(text)}
+              placeholderTextColor="grey"
+              placeholder="Weight"
+              style={[styles.input, { width: "49%", marginRight: 8 }]}
+            />
+            <TextInput
+              value={height}
+              onChangeText={(text) => setheight(text)}
+              placeholderTextColor="grey"
+              placeholder="Height"
+              style={[styles.input, { width: "49%" }]}
+            />
           </View>
           <View>
-            <TextInput value={bmi} onChangeText={text => setbmi(text)} placeholderTextColor="grey" placeholder="BMI" style={styles.input} />
-            <TextInput value={diag} onChangeText={text => setdiag(text)} placeholderTextColor="grey" placeholder="Diagnosis" style={styles.input} />
+            <TextInput
+              value={bmi}
+              onChangeText={(text) => setbmi(text)}
+              placeholderTextColor="grey"
+              placeholder="BMI"
+              style={styles.input}
+            />
+            <TextInput
+              value={diag}
+              onChangeText={(text) => setdiag(text)}
+              placeholderTextColor="grey"
+              placeholder="Diagnosis"
+              style={styles.input}
+            />
           </View>
-          <CustomDropdown isBig placeholder={"Medical Diagnosis"} options={diagnosisOptions} valueState={[diagnosis, setDiagnosis]} />
+          <CustomDropdown
+            isBig
+            placeholder={"Medical Diagnosis"}
+            options={diagnosisOptions}
+            valueState={[diagnosis, setDiagnosis]}
+          />
         </View>
         <Pressable
           style={styles.button}
@@ -69,7 +109,8 @@ const Forms = ({ navigation }) => {
             console.log(`Medical Diagnosis: ${diagnosis}`);
             // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
             navigation.navigate("Timer");
-          }}>
+          }}
+        >
           <Text style={styles.buttonText}>Submit</Text>
         </Pressable>
       </View>
@@ -79,30 +120,36 @@ const Forms = ({ navigation }) => {
 
 export default Forms;
 
-const CustomDropdown = ({ valueState = [], options, placeholder, isBig = false }) => {
-
+const CustomDropdown = ({
+  valueState = [],
+  options,
+  placeholder,
+  isBig = false,
+}) => {
   const [value, setValue] = valueState;
   const [isFocus, setIsFocus] = useState(false);
 
-  return <Dropdown
-    style={isBig ? styles.dropdownBig : styles.dropdown}
-    containerStyle={isBig ? styles.dropdownItemsBig : styles.dropdownItems}
-    placeholderStyle={styles.placeholderStyle}
-    selectedTextStyle={styles.selectedTextStyle}
-    data={options}
-    maxHeight={300}
-    labelField="label"
-    valueField="value"
-    placeholder={!isFocus ? placeholder : '...'}
-    value={value}
-    onFocus={() => setIsFocus(true)}
-    onBlur={() => setIsFocus(false)}
-    onChange={item => {
-      setValue(item.value);
-      setIsFocus(false);
-    }}
-  />
-}
+  return (
+    <Dropdown
+      style={isBig ? styles.dropdownBig : styles.dropdown}
+      containerStyle={isBig ? styles.dropdownItemsBig : styles.dropdownItems}
+      placeholderStyle={styles.placeholderStyle}
+      selectedTextStyle={styles.selectedTextStyle}
+      data={options}
+      maxHeight={300}
+      labelField="label"
+      valueField="value"
+      placeholder={!isFocus ? placeholder : "..."}
+      value={value}
+      onFocus={() => setIsFocus(true)}
+      onBlur={() => setIsFocus(false)}
+      onChange={(item) => {
+        setValue(item.value);
+        setIsFocus(false);
+      }}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -169,7 +216,7 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -178,7 +225,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   dropdownItems: {
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -188,7 +235,7 @@ const styles = StyleSheet.create({
   },
   dropdownBig: {
     height: 60,
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -196,7 +243,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   dropdownItemsBig: {
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -205,11 +252,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   placeholderStyle: {
-    color: 'grey',
+    color: "grey",
     fontSize: 20,
   },
   selectedTextStyle: {
     fontSize: 20,
-    color: '#fff',
+    color: "#fff",
   },
 });
