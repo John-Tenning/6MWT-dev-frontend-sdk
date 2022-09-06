@@ -1,18 +1,15 @@
 import {
-  Alert,
   Image,
   Platform,
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
   ToastAndroid,
   View,
-  Button,
-  ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
+import { LinearGradient } from "expo-linear-gradient";
 
 const LoginScreen = ({ navigation }) => {
   const [user, setuser] = useState("");
@@ -20,17 +17,17 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: "https://images.unsplash.com/photo-1546370080-e42239f15249?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
-        }}
-        resizeMode="cover"
-        style={styles.imageBackground}
+      <LinearGradient
+        colors={["#a1e1fa", "#3b7197"]}
+        style={styles.linearBackground}
       >
+        <Image
+          style={styles.imageCover}
+          source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
+        ></Image>
         <View style={styles.wrapper}>
           <View>
-            <Text style={styles.heading}>Login</Text>
-            <Text style={styles.subtext}>To enter the application</Text>
+            <Text style={styles.heading}>6MWT</Text>
             <CustomTextInput
               valueState={[user, setuser]}
               placeholder="Username"
@@ -54,7 +51,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
         </View>
-      </ImageBackground>
+      </LinearGradient>
     </View>
   );
 };
@@ -66,56 +63,38 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: "hidden",
   },
-  imageBackground: {
+  linearBackground: {
     flex: 1,
-    justifyContent: "center",
+  },
+  imageCover: {
+    flex: 1,
   },
   wrapper: {
-    backgroundColor: "white",
-    marginHorizontal: 24,
-    marginVertical: 64,
-    paddingVertical: 24,
     paddingHorizontal: 16,
-    borderRadius: 16,
-    justifyContent: "space-between",
-    display: "flex",
-    shadowColor: "#000",
-    shadowOpacity: 0.7,
-    shadowOffset: 16,
+    paddingVertical: 16,
   },
   heading: {
     fontSize: 48,
-    fontFamily: "Poppins",
     fontWeight: "bold",
-    color: "black",
+    color: "white",
     width: "100%",
-    textAlign: "center",
-  },
-  subtext: {
-    color: "#196966",
-    fontSize: 14,
-    fontFamily: "Poppins",
-    marginTop: 4,
-    marginBottom: 32,
-    width: "100%",
-    textAlign: "center",
+    marginBottom: 16,
   },
   button: {
     width: "100%",
-    backgroundColor: "#196966",
+    backgroundColor: "#a1e1fa",
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 16,
     elevation: 5,
     marginVertical: 8,
     marginTop: 16,
   },
   buttonText: {
     fontSize: 20,
-    color: "white",
-    // fontFamily: "Poppins",
-    fontWeight: "600",
+    color: "#3b7197",
+    fontWeight: 600,
   },
 });
