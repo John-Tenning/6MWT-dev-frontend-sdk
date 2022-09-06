@@ -6,6 +6,7 @@ const CustomTextInput = ({
   placeholder,
   mode = 0,
   isHalf = false,
+  isSecure = false,
 }) => {
   const [value, setValue] = valueState;
 
@@ -31,7 +32,7 @@ const CustomTextInput = ({
       placeholderTextColor={mode == 0 ? "grey" : "#f3f2f8"}
       placeholder={placeholder}
       style={styles.input}
-      keyboardType={"decimal-pad"}
+      secureTextEntry={isSecure}
     />
   );
 };

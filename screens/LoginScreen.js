@@ -35,6 +35,7 @@ const LoginScreen = ({ navigation }) => {
             <CustomTextInput
               valueState={[pass, setpass]}
               placeholder="Password"
+              isSecure={true}
             />
           </View>
           <Pressable
@@ -95,6 +96,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#3b7197",
-    fontWeight: 600,
+    fontWeight: "600",
   },
 });

@@ -21,12 +21,17 @@ const Forms = ({ navigation }) => {
 
   useEffect(() => {
     diagnosis === "yes"
-      ? setDiagOptOptionValues([{ label: "Yes", value: "yes" }])
+      ? setDiagOptOptionValues([
+        { label: "Post CABG Patients and HF", value: "Post" },
+        { label: "NYHA Class II-III HF", value: "NYHA"},
+        { label: "Advanced Symptomatic HF", value: "Adv"},
+        { label: "Elderly and Clinical", value: "EnC"}
+      ])
       : diagnosis === "no"
       ? setDiagOptOptionValues([
-          { label: "No", value: "no" },
-          { label: "No", value: "no" },
-          { label: "No", value: "no" },
+          { label: "Young to Middle Age", value: "YMA" },
+          { label: "Middle age - Seniority", value: "MAS" },
+          { label: "Elderly", value: "Eld" },
         ])
       : setDiagOptOptionValues([]);
   }, [diagnosis]);
@@ -43,7 +48,7 @@ const Forms = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <LinearGradient colors={["#ffffff", "#C1C1C1"]}>
+      <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{flex: 1, minHeight: "100%"}}>
         <View style={styles.wrapper}>
           <View>
             <Text style={styles.heading}>Patient Details</Text>
@@ -117,8 +122,8 @@ const Forms = ({ navigation }) => {
               console.log("Weight: " + weight);
               console.log("Height: " + height);
               console.log("BMI: " + bmi);
-              console.log("Diagnosis: " + diag);
               console.log(`Medical Diagnosis: ${diagnosis}`);
+              console.log("Diagnosis: " + diagOpt);
               // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
               navigation.navigate("Timer");
             }}
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#3b7197",
-    fontWeight: 600,
+    fontWeight: "600",
   },
   align: {
     display: "flex",
