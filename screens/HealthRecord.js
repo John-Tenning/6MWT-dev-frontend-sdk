@@ -104,19 +104,19 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 48,
         fontWeight: "bold",
-        color: "#000",
+        color: "#2A2A2A",
         width: "100%",
     },
     h2: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "#000",
+        color: "#2A2A2A",
         width: "100%",
     },
     subtext: {
-        color: "#000",
+        color: "#2A2A2A",
         fontSize: 16,
-        marginTop: 4,   
+        marginTop: 8,   
         marginBottom: 16,
     },
     button: {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         marginVertical: 12,
-        backgroundColor: "rgba(255, 255, 255, 0.38)",
+        backgroundColor: "rgba(240, 240, 240, 0.38)",
         borderRadius: 16,
         paddingHorizontal: 8,
         paddingVertical: 16,
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
         elevation: 3,
 
         // backdrop-filter: blur(25px);
-        // background-color: rgba(245,245,245,.2);
     },
     colFlex: {
         display: "flex",
@@ -174,5 +173,6 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: "center",
+        minHeight:"100%",
     },
 });

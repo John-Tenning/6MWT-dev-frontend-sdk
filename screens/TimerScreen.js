@@ -10,6 +10,7 @@ import {
   View,
   Button,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
 // Reference: https://openbase.com/js/react-native-countdown-circle-timer
@@ -17,41 +18,46 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo } from "@expo/vector-icons";
 
+const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
+const image = require('../assets/bgGradient4.png');
+
 const TimerScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
-      <LinearGradient
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        {/* <LinearGradient
         colors={["#a1e1fa", "#3b7197"]}
         style={{ flex: 1, minHeight: "100%" }}
-      >
+      > */}
         <View style={styles.wrapper}>
-          <View>
+          <View style={{ marginTop: 8 }}>
             <Text style={styles.heading}>Timer</Text>
             <Text style={styles.subtext}>Timer Screen</Text>
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View>
             <CustomTimer dur={60} timerName={"First"} />
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View>
             <CustomTimer dur={120} timerName={"Second"} />
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View>
             <CustomTimer dur={180} timerName={"Third"} />
           </View>
 
           <Pressable
-            style={styles.button}
+            style={styles.nextButton}
             onPress={() => {
               navigation.navigate("Health");
             }}
           >
-            <Text style={styles.buttonText}>Next</Text>
+            <Text style={styles.nextButtonText}>Next</Text>
           </Pressable>
         </View>
-      </LinearGradient>
+        {/* </LinearGradient> */}
+      </ImageBackground>
     </ScrollView>
   );
 };
@@ -66,16 +72,16 @@ const CustomTimer = ({ dur, timerName }) => {
     <View style={styles.timerContainer}>
       <View
         // colors={["#a1e1fa", "#3b7197"]}
-        style={styles.timer}
+        style={styles.timerRowFlex}
       >
         <CountdownCircleTimer
           size={96}
           isPlaying={isPlaying}
           key={key}
           duration={dur}
-          colors={["#3b7197", "#3b7197", "#3b7197", "#3b7197"]}
+          colors={["#2A2A2A", "#2A2A2A", "#2A2A2A", "#2A2A2A"]}
           colorsTime={[dur, dur * (2 / 3), dur * (1 / 3), 0]}
-          strokeWidth={8}
+          strokeWidth={6}
           onComplete={() => {
             // return { shouldRepeat: true, delay: 1.5 }
             setKey((prevKey) => prevKey + 1);
@@ -85,8 +91,8 @@ const CustomTimer = ({ dur, timerName }) => {
           }}
         >
           {({ remainingTime, color }) => (
-            <View style={styles.timerText}>
-              <Text style={{ color, fontSize: 28 }}>{remainingTime}</Text>
+            <View>
+              <Text style={{ color, fontSize: 28, fontWeight: "600" }}>{remainingTime}</Text>
             </View>
           )}
         </CountdownCircleTimer>
@@ -94,7 +100,7 @@ const CustomTimer = ({ dur, timerName }) => {
           <Text style={styles.timerNameText}>{timerName} Timer</Text>
           <View style={styles.timerButtons}>
             <Pressable
-              style={styles.smallButton}
+              style={styles.iconButton}
               onPress={
                 isPlaying === false
                   ? () => setIsPlaying(true)
@@ -102,20 +108,20 @@ const CustomTimer = ({ dur, timerName }) => {
               }
             >
               {isPlaying === false ? (
-                <Entypo name="controller-play" size={36} color={"#3b7197"} />
+                <Entypo name="controller-play" size={36} color={"#2A2A2A"} />
               ) : (
-                <Entypo name="controller-paus" size={36} color={"#3b7197"} />
+                <Entypo name="controller-paus" size={32} color={"#2A2A2A"} />
               )}
             </Pressable>
             <Pressable
-              style={styles.smallButton}
+              style={styles.iconButton}
               onPress={() => {
                 setKey((prevKey) => prevKey + 1);
                 setIsPlaying(false);
                 console.log("Reset");
               }}
             >
-              <Entypo name="cw" size={36} color={"#3b7197"} />
+              <Entypo name="cw" size={32} color={"#2A2A2A"} />
             </Pressable>
           </View>
         </View>
@@ -129,6 +135,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: "100%"
   },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    minHeight: "100%",
+  },
   wrapper: {
     paddingHorizontal: 16,
     paddingVertical: 48,
@@ -139,17 +150,17 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 48,
     fontWeight: "bold",
-    color: "#326789",
+    color: "#2A2A2A",
     width: "100%",
   },
   subtext: {
-    fontSize: 14,
-    color: "#326789",
+    color: "#2A2A2A",
+    fontSize: 16,
     marginTop: 8,
-    marginBottom: 32,
-    marginLeft: 8,
+    marginBottom: 16,
+    marginLeft: 4,
   },
-  button: {
+  nextButton: {
     width: "100%",
     height: 64,
     backgroundColor: "#a1e1fa",
@@ -159,7 +170,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
-    marginTop: 32,
+    marginTop: 36,
     shadowColor: "#3b7197",
     shadowOffset: {
       width: 4,
@@ -167,23 +178,22 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.11,
   },
-  smallButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    display: "flex",
-    padding: 10,
-    borderRadius: 20,
-    // elevation: 5,
-    marginLeft: 5,
-  },
-  buttonText: {
+  nextButtonText: {
     fontSize: 20,
     color: "#3b7197",
     fontWeight: "600",
   },
-  smallButtonText: {
-    fontSize: 14,
-    color: "#2A2A2A",
+  timerButtons: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: -16,
+  },
+  iconButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    padding: 10,
   },
   timerContainer: {
     borderRadius: 16,
@@ -191,36 +201,28 @@ const styles = StyleSheet.create({
       width: 4,
       height: 4,
     },
-    shadowColor: "#eeeeee",
-    shadowOpacity: 0.35,
+    shadowColor: "rgba(255, 255, 255, 0.1)",
+    shadowOpacity: 0.25,
     elevation: 3,
   },
   textControl: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 32,
     paddingVertical: 16,
   },
-  timer: {
+  timerRowFlex: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 24,
-    backgroundColor: "#a1e1fa",
+    paddingVertical: 8,
+    backgroundColor: "rgba(240, 240, 240, 0.38)",
     borderRadius: 16,
   },
-  timerButtons: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: -10,
-  },
   timerNameText: {
-    color: "#3b7197",
-    fontSize: 20,
+    fontWeight: "600",
+    color: "#2A2A2A",
+    fontSize: 24,
     marginBottom: 4,
-  },
-  timerText: {
-    alignItems: "center",
-    color: "#000",
   },
 });

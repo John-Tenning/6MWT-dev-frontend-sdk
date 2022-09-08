@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 
-const TimerScreenCopyCopy = ({ navigation }) => {
+const TimerScreenCopy = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}>
@@ -41,7 +41,7 @@ const TimerScreenCopyCopy = ({ navigation }) => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              navigation.navigate("Health");
+              navigation.navigate("Timer");
             }}
           >
             <Text style={styles.buttonText}>Next</Text>
