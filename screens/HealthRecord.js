@@ -1,22 +1,26 @@
-import { Image, Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View, ScrollView, ImageBackground } from "react-native";
 import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+
+const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
+const image = require('../assets/bgGradient4.png');
 
 const HealthRecord = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
-            <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}>
+            {/* <LinearGradient
+                colors={["#a1e1fa", "#3b7197"]}
+                style={{ flex: 1, minHeight: "100%" }}
+            > */}
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={styles.wrapper}>
-                    <View>
+                    <View style={{marginTop: 8}}>
                         <Text style={styles.heading}>Health Record</Text>
                         <Text style={styles.subtext}>Here is a summary of your details</Text>
                     </View>
-                    <View style={styles.heartRate}>
-                        <View style={{ width: "30%", marginTop: 48, paddingRight: 20 }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>Resting</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>72</Text>
-                        </View>
-                        <View style={{ width: "40%", alignItems: "center" }}>
+
+                    <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
+                        <View style={{ width: "50%", alignItems: "center" }}>
                             <Text style={[styles.h2, { textAlign: "center" }]}>Average Heart Rate</Text>
                             <Image
                                 style={styles.imageProp}
@@ -24,12 +28,20 @@ const HealthRecord = ({ navigation }) => {
                             ></Image>
                             <Text style={[styles.heading, { textAlign: "center" }]}>75</Text>
                         </View>
-                        <View style={{ width: "30%", marginTop: 48, paddingLeft: 20 }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>Max</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>78</Text>
+
+                        <View style={styles.colFlex}>
+                            <View>
+                                <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>Resting</Text>
+                                <Text style={[styles.heading, { textAlign: "center" }]}>72</Text>
+                            </View>
+                            <View>
+                                <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>Max</Text>
+                                <Text style={[styles.heading, { textAlign: "center" }]}>78</Text>
+                            </View>
                         </View>
                     </View>
-                    <View style={styles.heartRate}>
+
+                    <View style={styles.rowFlex}>
                         <View style={{ width: "33%", paddingRight: 20 }}>
                             <Text style={[styles.h2, { textAlign: "center" }]}>1 Minute</Text>
                             <Text style={[styles.heading, { textAlign: "center" }]}>60</Text>
@@ -43,17 +55,35 @@ const HealthRecord = ({ navigation }) => {
                             <Text style={[styles.heading, { textAlign: "center" }]}>80</Text>
                         </View>
                     </View>
+
+                    <View style={[styles.rowFlex, { paddingHorizontal: 24 }]}>
+                        <View style={{ width: "50%", alignItems: "center" }}>
+                            <Text style={[styles.h2, { textAlign: "center" }]}>Distance Covered</Text>
+                            <Image
+                                style={styles.imageProp}
+                                source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/walk.png" }}
+                            ></Image>
+                            <Text style={[styles.heading, { textAlign: "center" }]}>95</Text>
+                        </View>
+                        <View style={{ width: "50%", paddingVertical: 48 }}>
+                            <Text style={[styles.h2, { textAlign: "center" }]}>VO2 Max</Text>
+                            <Text style={[styles.heading, { textAlign: "center" }]}>16</Text>
+                        </View>
+                    </View>
+
                     <Pressable
                         style={styles.button}
                         onPress={() => {
                             console.log("Report Generated");
+                            navigation.navigate("Login");
                         }}
                     >
                         <Text style={styles.buttonText}>Generate Report</Text>
                     </Pressable>
                 </View>
-            </LinearGradient>
-        </ScrollView>
+            </ImageBackground>
+            {/* </LinearGradient> */}
+        </ScrollView >
     );
 };
 
@@ -74,20 +104,20 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 48,
         fontWeight: "bold",
-        color: "#3b7197",
+        color: "#000",
         width: "100%",
     },
     h2: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "#3b7197",
+        color: "#000",
         width: "100%",
     },
     subtext: {
-        color: "#3b7197",
+        color: "#000",
         fontSize: 16,
-        marginTop: 4,
-        marginBottom: 32,
+        marginTop: 4,   
+        marginBottom: 16,
     },
     button: {
         width: "100%",
@@ -113,12 +143,36 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
     imageProp: {
-        width: 100,
-        height: 100,
+        width: 60,
+        height: 60,
+        marginVertical: 8,
     },
-    heartRate: {
-        height: "35%",
+    rowFlex: {
         display: "flex",
         flexDirection: "row",
+        marginVertical: 12,
+        backgroundColor: "rgba(255, 255, 255, 0.38)",
+        borderRadius: 16,
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        shadowOffset: {
+            width: 4,
+            height: 4,
+        },
+        shadowColor: "rgba(255, 255, 255, 0.1)",
+        shadowOpacity: 0.25,
+        elevation: 3,
+
+        // backdrop-filter: blur(25px);
+        // background-color: rgba(245,245,245,.2);
+    },
+    colFlex: {
+        display: "flex",
+        flexDirection: "column",
+        paddingHorizontal: 48,
+    },
+    image: {
+        flex: 1,
+        justifyContent: "center",
     },
 });

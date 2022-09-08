@@ -45,8 +45,7 @@ const TimerScreen = ({ navigation }) => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              console.log("Timer Screen");
-              //   navigation.navigate("Forms");
+              navigation.navigate("Health");
             }}
           >
             <Text style={styles.buttonText}>Next</Text>
@@ -74,7 +73,7 @@ const CustomTimer = ({ dur, timerName }) => {
           isPlaying={isPlaying}
           key={key}
           duration={dur}
-          colors={["#3b7197", "#3b7197"]}
+          colors={["#3b7197", "#3b7197", "#3b7197", "#3b7197"]}
           colorsTime={[dur, dur * (2 / 3), dur * (1 / 3), 0]}
           strokeWidth={8}
           onComplete={() => {

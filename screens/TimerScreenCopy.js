@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 
-const TimerScreen = ({ navigation }) => {
+const TimerScreenCopyCopy = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}>
@@ -52,7 +52,7 @@ const TimerScreen = ({ navigation }) => {
   );
 };
 
-export default TimerScreen;
+export default TimerScreenCopy;
 
 const CustomTimer = ({ dur, timerName }) => {
   const [isPlaying, setIsPlaying] = useState(false);
