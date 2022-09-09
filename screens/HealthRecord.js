@@ -21,7 +21,7 @@ const HealthRecord = ({ navigation }) => {
 
                     <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
                         <View style={{ width: "50%", alignItems: "center" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>Average Heart Rate</Text>
+                            <Text style={[styles.h2, { textAlign: "center", width: "70%" }]}>Average Heart Rate</Text>
                             <Image
                                 style={styles.imageProp}
                                 source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/20-love-heart-lineal.gif" }}
@@ -42,16 +42,16 @@ const HealthRecord = ({ navigation }) => {
                     </View>
 
                     <View style={styles.rowFlex}>
-                        <View style={{ width: "33%", paddingRight: 20 }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>1 Minute</Text>
+                        <View style={{ width: "33%" }}>
+                            <Text style={[styles.h2, { textAlign: "center" }]}>1 Min</Text>
                             <Text style={[styles.heading, { textAlign: "center" }]}>60</Text>
                         </View>
-                        <View style={{ width: "33%", alignItems: "center" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>2 Minutes</Text>
+                        <View style={{ width: "33%" }}>
+                            <Text style={[styles.h2, { textAlign: "center" }]}>2 Mins</Text>
                             <Text style={[styles.heading, { textAlign: "center" }]}>75</Text>
                         </View>
-                        <View style={{ width: "33%", paddingLeft: 20 }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>3 Minutes</Text>
+                        <View style={{ width: "33%" }}>
+                            <Text style={[styles.h2, { textAlign: "center" }]}>3 Mins</Text>
                             <Text style={[styles.heading, { textAlign: "center" }]}>80</Text>
                         </View>
                     </View>

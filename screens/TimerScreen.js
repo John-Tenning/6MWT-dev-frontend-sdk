@@ -75,11 +75,11 @@ const CustomTimer = ({ dur, timerName }) => {
         style={styles.timerRowFlex}
       >
         <CountdownCircleTimer
-          size={96}
+          size={104}
           isPlaying={isPlaying}
           key={key}
           duration={dur}
-          colors={["#2A2A2A", "#2A2A2A", "#2A2A2A", "#2A2A2A"]}
+          colors={["#01695C", "#01695C", "#01695C", "#01695C"]}
           colorsTime={[dur, dur * (2 / 3), dur * (1 / 3), 0]}
           strokeWidth={6}
           onComplete={() => {
@@ -92,7 +92,7 @@ const CustomTimer = ({ dur, timerName }) => {
         >
           {({ remainingTime, color }) => (
             <View>
-              <Text style={{ color, fontSize: 28, fontWeight: "600" }}>{remainingTime}</Text>
+              <Text style={{ color: "#04454C", fontSize: 28, fontWeight: "600" }}>{remainingTime}</Text>
             </View>
           )}
         </CountdownCircleTimer>
@@ -108,9 +108,9 @@ const CustomTimer = ({ dur, timerName }) => {
               }
             >
               {isPlaying === false ? (
-                <Entypo name="controller-play" size={36} color={"#2A2A2A"} />
+                <Entypo name="controller-play" size={36} color={"#404040"} />
               ) : (
-                <Entypo name="controller-paus" size={32} color={"#2A2A2A"} />
+                <Entypo name="controller-paus" size={36} color={"#404040"} />
               )}
             </Pressable>
             <Pressable
@@ -121,7 +121,7 @@ const CustomTimer = ({ dur, timerName }) => {
                 console.log("Reset");
               }}
             >
-              <Entypo name="cw" size={32} color={"#2A2A2A"} />
+              <Entypo name="cw" size={32} color={"#404040"} />
             </Pressable>
           </View>
         </View>
@@ -218,11 +218,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: "rgba(240, 240, 240, 0.38)",
     borderRadius: 16,
+    marginVertical: 8,
   },
   timerNameText: {
-    fontWeight: "600",
-    color: "#2A2A2A",
-    fontSize: 24,
+    fontWeight: "500",
+    color: "#404040",
+    fontSize: 22,
     marginBottom: 4,
   },
 });

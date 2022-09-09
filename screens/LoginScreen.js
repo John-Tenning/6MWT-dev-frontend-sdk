@@ -7,10 +7,13 @@ import {
   ToastAndroid,
   View,
   ImageBackground,
+  Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
 import { LinearGradient } from "expo-linear-gradient";
+import { Header } from "react-navigation-stack";
 
 const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
 const image = require('../assets/bgGradient4.png');
@@ -18,9 +21,17 @@ const image = require('../assets/bgGradient4.png');
 const LoginScreen = ({ navigation }) => {
   const [user, setuser] = useState("");
   const [pass, setpass] = useState("");
+  const [errorUser, setErrorUser] = useState(false);
+  const [errorPass, setErrorPass] = useState(false);
+
+  var detailsNotNull = true;
+  var count = 0;
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior= {(Platform.OS === 'ios')? "padding" : null}
+    >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         {/* <LinearGradient
           colors={["#a1e1fa", "#3b7197"]}
@@ -35,10 +46,12 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.heading}>6MWT</Text>
             <CustomTextInput
               valueState={[user, setuser]}
+              errorState={[errorUser, setErrorUser]}
               placeholder="Username"
             />
             <CustomTextInput
               valueState={[pass, setpass]}
+              errorState={[errorPass, setErrorPass]}
               placeholder="Password"
               isSecure={true}
             />
@@ -46,12 +59,25 @@ const LoginScreen = ({ navigation }) => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              console.log(`UserName: ${user}`);
-              console.log(`Password: ${pass}`);
-              if (Platform.OS === "android") {
-                ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
+              count = 0;
+              user.length <= 0 ? (setErrorUser(true), count++) : setErrorUser(false);
+              pass.length <= 0 ? (setErrorPass(true), count++) : setErrorPass(false);
+
+              if (count > 0) {
+                detailsNotNull = false;
+                Alert.alert("Enter Valid Details");
+              } else {
+                detailsNotNull = true;
               }
-              navigation.navigate("Forms");
+
+              if (detailsNotNull) {
+                console.log(`UserName: ${user}`);
+                console.log(`Password: ${pass}`);
+                if (Platform.OS === "android") {
+                  ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
+                }
+                navigation.navigate("Forms");
+              }
             }}
           >
             <Text style={styles.buttonText}>Login</Text>
@@ -59,7 +85,7 @@ const LoginScreen = ({ navigation }) => {
         </View>
         {/* </LinearGradient> */}
       </ImageBackground >
-    </View >
+    </KeyboardAvoidingView >
   );
 };
 
