@@ -1,14 +1,9 @@
 import {
   Alert,
-  Image,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
-  ToastAndroid,
   View,
-  Button,
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
@@ -30,15 +25,15 @@ const TimerScreen = ({ navigation }) => {
             <Text style={styles.subtext}>Timer Screen</Text>
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View style={[{ marginVertical: 10 }]}>
             <CustomTimer dur={60} timerName={"First"} />
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View style={[{ marginVertical: 10 }]}>
             <CustomTimer dur={120} timerName={"Second"} />
           </View>
 
-          <View style={[{ marginVertical: 20 }]}>
+          <View style={[{ marginVertical: 10 }]}>
             <CustomTimer dur={180} timerName={"Third"} />
           </View>
 
@@ -128,7 +123,7 @@ const CustomTimer = ({ dur, timerName }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: "100%"
+    minHeight: "100%",
   },
   wrapper: {
     paddingHorizontal: 16,
