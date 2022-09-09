@@ -6,10 +6,14 @@ import {
   Text,
   ToastAndroid,
   View,
+  ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
 import { LinearGradient } from "expo-linear-gradient";
+
+const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
+const image = require('../assets/bgGradient4.png');
 
 const LoginScreen = ({ navigation }) => {
   const [user, setuser] = useState("");
@@ -17,10 +21,11 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={["#a1e1fa", "#3b7197"]}
-        style={styles.linearBackground}
-      >
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        {/* <LinearGradient
+          colors={["#a1e1fa", "#3b7197"]}
+          style={styles.linearBackground}
+        > */}
         <Image
           style={styles.imageCover}
           source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
@@ -35,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
             <CustomTextInput
               valueState={[pass, setpass]}
               placeholder="Password"
+              isSecure={true}
             />
           </View>
           <Pressable
@@ -51,8 +57,9 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
         </View>
-      </LinearGradient>
-    </View>
+        {/* </LinearGradient> */}
+      </ImageBackground >
+    </View >
   );
 };
 
@@ -95,6 +102,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#3b7197",
-    fontWeight: 600,
+    fontWeight: "600",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
 });

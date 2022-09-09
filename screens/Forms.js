@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Pressable, StyleSheet, Text, View, ScrollView, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
@@ -18,17 +18,26 @@ const Forms = ({ navigation }) => {
   const [diagOptOptionValues, setDiagOptOptionValues] = useState([
     { label: "Yes", value: "yes" },
   ]);
+  var checkAge = true;
+  var checkHeight = true;
+  var checkWeight = true;
+  var detailsNotNull = true;
 
   useEffect(() => {
     diagnosis === "yes"
-      ? setDiagOptOptionValues([{ label: "Yes", value: "yes" }])
-      : diagnosis === "no"
       ? setDiagOptOptionValues([
-          { label: "No", value: "no" },
-          { label: "No", value: "no" },
-          { label: "No", value: "no" },
+        { label: "Post CABG Patients and HF", value: "Post" },
+        { label: "NYHA Class II-III HF", value: "NYHA" },
+        { label: "Advanced Symptomatic HF", value: "Adv" },
+        { label: "Elderly and Clinical", value: "EnC" }
+      ])
+      : diagnosis === "no"
+        ? setDiagOptOptionValues([
+          { label: "Young to Middle Age", value: "YMA" },
+          { label: "Middle age - Seniority", value: "MAS" },
+          { label: "Elderly", value: "Eld" },
         ])
-      : setDiagOptOptionValues([]);
+        : setDiagOptOptionValues([]);
   }, [diagnosis]);
 
   const genderOptions = [
@@ -43,7 +52,7 @@ const Forms = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <LinearGradient colors={["#ffffff", "#C1C1C1"]}>
+      <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}>
         <View style={styles.wrapper}>
           <View>
             <Text style={styles.heading}>Patient Details</Text>
@@ -52,6 +61,11 @@ const Forms = ({ navigation }) => {
               mode={1}
               valueState={[patientID, setPatientID]}
               placeholder="Patient ID"
+            />
+            <CustomTextInput
+              mode={1}
+              valueState={[name, setName]}
+              placeholder="Name"
             />
             <View style={styles.align}>
               <CustomTextInput
@@ -112,15 +126,47 @@ const Forms = ({ navigation }) => {
             onPress={() => {
               console.log("Patient ID: " + patientID);
               console.log("Name: " + name);
+
+              if (isNaN(+age) || age === null) {
+                checkAge = false;
+                Alert.alert("Enter Valid Age");
+              } else {
+                checkAge = true;
+              }
+
+              if (isNaN(+weight) || weight === null) {
+                checkWeight = false;
+                Alert.alert("Enter Valid Weight");
+              } else {
+                checkWeight = true;
+              }
+
+              if (isNaN(+height) || height === null) {
+                checkHeight = false;
+                Alert.alert("Enter Valid Height");
+              } else {
+                checkHeight = true;
+              }
+
+              if (patientID.length <= 0 || name.length <= 0) {
+                detailsNotNull = false;
+                Alert.alert("Enter Valid Details");
+              } else {
+                detailsNotNull = true;
+              }
+
               console.log("Age: " + age);
               console.log(`Gender: ${gender}`);
               console.log("Weight: " + weight);
               console.log("Height: " + height);
               console.log("BMI: " + bmi);
-              console.log("Diagnosis: " + diag);
               console.log(`Medical Diagnosis: ${diagnosis}`);
+              console.log("Diagnosis: " + diagOpt);
               // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
-              navigation.navigate("Timer");
+
+              if (checkAge && checkWeight && checkHeight && detailsNotNull) {
+                navigation.navigate("Timer");
+              }
             }}
           >
             <Text style={styles.buttonText}>Submit</Text>
@@ -189,7 +235,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "#3b7197",
-    fontWeight: 600,
+    fontWeight: "600",
   },
   align: {
     display: "flex",
