@@ -1,14 +1,9 @@
 import {
   Alert,
-  Image,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
-  ToastAndroid,
   View,
-  Button,
   ScrollView,
   ImageBackground,
 } from "react-native";
