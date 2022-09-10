@@ -1,11 +1,22 @@
-import { Pressable, StyleSheet, Text, View, ScrollView, Alert, ImageBackground, KeyboardAvoidingView } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Alert,
+  ImageBackground,
+  KeyboardAvoidingView,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDropDown from "../components/CustomDropDown";
 
-const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
-const image = require('../assets/bgGradient4.png');
+const image2 = {
+  uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
+};
+const image = require("../assets/bgGradient4.png");
 
 const Forms = ({ navigation }) => {
   const [patientID, setPatientID] = useState("");
@@ -37,18 +48,20 @@ const Forms = ({ navigation }) => {
   useEffect(() => {
     hadDiagnosis === "yes"
       ? (setDiagOptOptionValues([
-        { label: "Post CABG Patients and HF", value: "Post" },
-        { label: "NYHA Class II-III HF", value: "NYHA" },
-        { label: "Advanced Symptomatic HF", value: "Adv" },
-        { label: "Elderly and Clinical", value: "EnC" }
-      ]), setDiagOpt(""))
+          { label: "Post CABG Patients and HF", value: "Post" },
+          { label: "NYHA Class II-III HF", value: "NYHA" },
+          { label: "Advanced Symptomatic HF", value: "Adv" },
+          { label: "Elderly and Clinical", value: "EnC" },
+        ]),
+        setDiagOpt(""))
       : hadDiagnosis === "no"
-        ? (setDiagOptOptionValues([
+      ? (setDiagOptOptionValues([
           { label: "Young to Middle Age", value: "YMA" },
           { label: "Middle age - Seniority", value: "MAS" },
           { label: "Elderly", value: "Eld" },
-        ]), setDiagOpt(""))
-        : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" },]);
+        ]),
+        setDiagOpt(""))
+      : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
   }, [hadDiagnosis]);
 
   const genderOptions = [
@@ -64,11 +77,11 @@ const Forms = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior= {(Platform.OS === 'ios')? "padding" : null}
+      behavior={Platform.OS === "ios" ? "padding" : null}
     >
-      <ScrollView style={styles.container}>
-        {/* <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}> */}
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <ScrollView style={styles.container}>
+          {/* <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}> */}
           <View style={styles.wrapper}>
             <Text style={styles.heading}>Patient Details</Text>
             <Text style={styles.subtext}>Enter the required details</Text>
@@ -144,15 +157,33 @@ const Forms = ({ navigation }) => {
               onPress={() => {
                 count = 0;
 
-                patientID.length <= 0 ? (setErrorPID(true), count++) : setErrorPID(false);
-                name.length <= 0 ? (setErrorName(true), count++) : setErrorName(false);
-                (isNaN(+age) || age === null) ? (setErrorAge(true), count++) : setErrorAge(false);
-                gender === null ? (setErrorGender(true), count++) : setErrorGender(false);
-                (isNaN(+weight) || weight === null) ? (setErrorWeight(true), count++) : setErrorWeight(false);
-                (isNaN(+height) || height === null) ? (setErrorHeight(true), count++) : setErrorHeight(false);
-                diagnosis.length <= 0 ? (setErrorDiagnosis(true), count++) : setErrorDiagnosis(false);
-                hadDiagnosis === null ? (setErrorHadDiagnosis(true), count++) : setErrorHadDiagnosis(false);
-                diagOpt.length <= 0 ? (setErrorDiagOpt(true), count++) : setErrorDiagOpt(false);
+                patientID.length <= 0
+                  ? (setErrorPID(true), count++)
+                  : setErrorPID(false);
+                name.length <= 0
+                  ? (setErrorName(true), count++)
+                  : setErrorName(false);
+                isNaN(+age) || age === null
+                  ? (setErrorAge(true), count++)
+                  : setErrorAge(false);
+                gender === null
+                  ? (setErrorGender(true), count++)
+                  : setErrorGender(false);
+                isNaN(+weight) || weight === null
+                  ? (setErrorWeight(true), count++)
+                  : setErrorWeight(false);
+                isNaN(+height) || height === null
+                  ? (setErrorHeight(true), count++)
+                  : setErrorHeight(false);
+                diagnosis.length <= 0
+                  ? (setErrorDiagnosis(true), count++)
+                  : setErrorDiagnosis(false);
+                hadDiagnosis === null
+                  ? (setErrorHadDiagnosis(true), count++)
+                  : setErrorHadDiagnosis(false);
+                diagOpt.length <= 0
+                  ? (setErrorDiagOpt(true), count++)
+                  : setErrorDiagOpt(false);
 
                 if (count > 0) {
                   detailsNotNull = false;
@@ -181,9 +212,9 @@ const Forms = ({ navigation }) => {
               <Text style={styles.buttonText}>Submit</Text>
             </Pressable>
           </View>
-        </ImageBackground>
-        {/* </LinearGradient> */}
-      </ScrollView>
+          {/* </LinearGradient> */}
+        </ScrollView>
+      </ImageBackground>
     </KeyboardAvoidingView>
   );
 };
