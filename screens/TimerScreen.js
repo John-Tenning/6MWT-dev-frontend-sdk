@@ -18,29 +18,18 @@ const image = require('../assets/bgGradient4.png');
 
 const TimerScreen = ({ navigation }) => {
   return (
-    <ScrollView style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        {/* <LinearGradient
-        colors={["#a1e1fa", "#3b7197"]}
-        style={{ flex: 1, minHeight: "100%" }}
-      > */}
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <ScrollView style={styles.container}>
+        {/* <LinearGradient colors={["#a1e1fa", "#3b7197"]} style={{ flex: 1, minHeight: "100%" }} > */}
         <View style={styles.wrapper}>
           <View style={{ marginTop: 8 }}>
             <Text style={styles.heading}>Timer</Text>
             <Text style={styles.subtext}>Timer Screen</Text>
           </View>
 
-          <View>
-            <CustomTimer dur={60} timerName={"First"} />
-          </View>
-
-          <View>
-            <CustomTimer dur={120} timerName={"Second"} />
-          </View>
-
-          <View>
-            <CustomTimer dur={180} timerName={"Third"} />
-          </View>
+          <CustomTimer dur={60} timerName={"First"} />
+          <CustomTimer dur={120} timerName={"Second"} />
+          <CustomTimer dur={180} timerName={"Third"} />
 
           <Pressable
             style={styles.nextButton}
@@ -52,8 +41,8 @@ const TimerScreen = ({ navigation }) => {
           </Pressable>
         </View>
         {/* </LinearGradient> */}
-      </ImageBackground>
-    </ScrollView>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
@@ -103,9 +92,9 @@ const CustomTimer = ({ dur, timerName }) => {
               }
             >
               {isPlaying === false ? (
-                <Entypo name="controller-play" size={36} color={"#404040"} />
+                <Entypo name="controller-play" size={36} color={"#303030"} />
               ) : (
-                <Entypo name="controller-paus" size={36} color={"#404040"} />
+                <Entypo name="controller-paus" size={36} color={"#303030"} />
               )}
             </Pressable>
             <Pressable
@@ -116,7 +105,7 @@ const CustomTimer = ({ dur, timerName }) => {
                 console.log("Reset");
               }}
             >
-              <Entypo name="cw" size={32} color={"#404040"} />
+              <Entypo name="cw" size={32} color={"#303030"} />
             </Pressable>
           </View>
         </View>
@@ -128,7 +117,6 @@ const CustomTimer = ({ dur, timerName }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: "100%"
   },
   image: {
     flex: 1,
@@ -138,9 +126,9 @@ const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 16,
     paddingVertical: 48,
-    justifyContent: "space-between",
     display: "flex",
-    height: "100%",
+    justifyContent: "space-between",
+    minHeight: "100%",
   },
   heading: {
     fontSize: 48,
@@ -165,7 +153,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     elevation: 5,
-    marginTop: 36,
+    marginTop: 20,
     shadowColor: "#3b7197",
     shadowOffset: {
       width: 4,
@@ -213,11 +201,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: "rgba(240, 240, 240, 0.38)",
     borderRadius: 16,
-    marginVertical: 8,
+    marginVertical: 16,
   },
   timerNameText: {
     fontWeight: "500",
-    color: "#404040",
+    color: "#303030",
     fontSize: 22,
     marginBottom: 4,
   },

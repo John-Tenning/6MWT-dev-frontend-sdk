@@ -14,7 +14,7 @@ const HealthRecord = ({ navigation }) => {
             > */}
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={styles.wrapper}>
-                    <View style={{marginTop: 8}}>
+                    <View style={{ marginTop: 8 }}>
                         <Text style={styles.heading}>Health Record</Text>
                         <Text style={styles.subtext}>Here is a summary of your details</Text>
                     </View>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     subtext: {
         color: "#2A2A2A",
         fontSize: 16,
-        marginTop: 8,   
+        marginTop: 8,
         marginBottom: 16,
     },
     button: {
@@ -173,6 +173,6 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: "center",
-        minHeight:"100%",
+        minHeight: "100%",
     },
 });
