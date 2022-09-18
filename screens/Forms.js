@@ -12,6 +12,8 @@ import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDropDown from "../components/CustomDropDown";
+import { authentication } from "../firebase-config";
+import { signOut } from "firebase/auth";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -48,20 +50,20 @@ const Forms = ({ navigation }) => {
   useEffect(() => {
     hadDiagnosis === "yes"
       ? (setDiagOptOptionValues([
-          { label: "Post CABG Patients and HF", value: "Post" },
-          { label: "NYHA Class II-III HF", value: "NYHA" },
-          { label: "Advanced Symptomatic HF", value: "Adv" },
-          { label: "Elderly and Clinical", value: "EnC" },
-        ]),
+        { label: "Post CABG Patients and HF", value: "Post" },
+        { label: "NYHA Class II-III HF", value: "NYHA" },
+        { label: "Advanced Symptomatic HF", value: "Adv" },
+        { label: "Elderly and Clinical", value: "EnC" },
+      ]),
         setDiagOpt(""))
       : hadDiagnosis === "no"
-      ? (setDiagOptOptionValues([
+        ? (setDiagOptOptionValues([
           { label: "Young to Middle Age", value: "YMA" },
           { label: "Middle age - Seniority", value: "MAS" },
           { label: "Elderly", value: "Eld" },
         ]),
-        setDiagOpt(""))
-      : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
+          setDiagOpt(""))
+        : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
   }, [hadDiagnosis]);
 
   const genderOptions = [
@@ -73,6 +75,17 @@ const Forms = ({ navigation }) => {
     { label: "Yes", value: "yes" },
     { label: "No", value: "no" },
   ];
+
+  const handleSignOut = () => {
+    signOut(authentication)
+    .then(() => {
+      alert("Sign Out Successful");
+      navigation.replace("Login");
+    })
+    .catch((error) => {
+      alert(error);
+    })
+  }
 
   return (
     <KeyboardAvoidingView
@@ -104,6 +117,7 @@ const Forms = ({ navigation }) => {
                 errorState={[errorAge, setErrorAge]}
                 placeholder="Age"
                 isHalf
+                number={true}
               />
               <CustomDropDown
                 placeholder={"Gender"}
@@ -121,6 +135,7 @@ const Forms = ({ navigation }) => {
                 errorState={[errorWeight, setErrorWeight]}
                 placeholder="Weight"
                 isHalf
+                number={true}
               />
               <CustomTextInput
                 mode={1}
@@ -128,6 +143,7 @@ const Forms = ({ navigation }) => {
                 errorState={[errorHeight, setErrorHeight]}
                 placeholder="Height"
                 isHalf
+                number={true}
               />
             </View>
             <View>
@@ -211,6 +227,14 @@ const Forms = ({ navigation }) => {
             >
               <Text style={styles.buttonText}>Submit</Text>
             </Pressable>
+
+            <Pressable
+              style={styles.button}
+              onPress={handleSignOut}
+            >
+              <Text style={styles.buttonText}>Sign Out</Text>
+            </Pressable>
+
           </View>
           {/* </LinearGradient> */}
         </ScrollView>

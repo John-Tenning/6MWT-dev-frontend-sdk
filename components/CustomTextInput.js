@@ -8,6 +8,8 @@ const CustomTextInput = ({
   mode = 0,
   isHalf = false,
   isSecure = false,
+  capitalize = true,
+  number = false,
 }) => {
   const [value, setValue] = valueState;
   const [error, setError] = errorState;
@@ -36,6 +38,8 @@ const CustomTextInput = ({
       placeholder={placeholder}
       style={styles.input}
       secureTextEntry={isSecure}
+      autoCapitalize={capitalize ? "sentences" : "none"}
+      keyboardType={number ? "numeric" : "default"}
     />
   );
 };

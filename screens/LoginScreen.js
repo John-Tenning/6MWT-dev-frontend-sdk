@@ -14,6 +14,9 @@ import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "react-navigation-stack";
+import { authentication } from "../firebase-config";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
 const image = require('../assets/bgGradient4.png');
@@ -27,16 +30,62 @@ const LoginScreen = ({ navigation }) => {
   var detailsNotNull = true;
   var count = 0;
 
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(authentication, user, pass)
+      .then(() => {
+        alert("New user " + user + " created");
+        navigation.replace("Forms");
+      })
+      .catch((error) => {
+        alert(error.message);
+
+        if (error.code == 'auth/invalid-email' ||
+          error.code == 'auth/email-already-in-use') {
+          setErrorUser(true);
+        } else {
+          setErrorUser(false);
+        }
+
+        if (error.code == 'auth/internal-error' ||
+          error.code == 'auth/weak-password') {
+          setErrorPass(true);
+        } else {
+          setErrorPass(false);
+        }
+      })
+  }
+
+  const handleLogIn = () => {
+    signInWithEmailAndPassword(authentication, user, pass)
+      .then(() => {
+        alert("Login Successful with " + user);
+        navigation.replace("Forms");
+      })
+      .catch((error) => {
+        alert(error.message);
+
+        if (error.code == 'auth/invalid-email' ||
+          error.code == 'auth/user-not-found') {
+          setErrorUser(true);
+        } else {
+          setErrorUser(false);
+        }
+
+        if (error.code == 'auth/internal-error' ||
+          error.code == 'auth/wrong-password') {
+          setErrorPass(true);
+        } else {
+          setErrorPass(false);
+        }
+      })
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior= {(Platform.OS === 'ios')? "padding" : null}
+      behavior={(Platform.OS === 'ios') ? "padding" : null}
     >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        {/* <LinearGradient
-          colors={["#a1e1fa", "#3b7197"]}
-          style={styles.linearBackground}
-        > */}
         <Image
           style={styles.imageCover}
           source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
@@ -48,6 +97,7 @@ const LoginScreen = ({ navigation }) => {
               valueState={[user, setuser]}
               errorState={[errorUser, setErrorUser]}
               placeholder="Username"
+              capitalize={false}
             />
             <CustomTextInput
               valueState={[pass, setpass]}
@@ -58,32 +108,18 @@ const LoginScreen = ({ navigation }) => {
           </View>
           <Pressable
             style={styles.button}
-            onPress={() => {
-              count = 0;
-              user.length <= 0 ? (setErrorUser(true), count++) : setErrorUser(false);
-              pass.length <= 0 ? (setErrorPass(true), count++) : setErrorPass(false);
-
-              if (count > 0) {
-                detailsNotNull = false;
-                Alert.alert("Enter Valid Details");
-              } else {
-                detailsNotNull = true;
-              }
-
-              if (detailsNotNull) {
-                console.log(`UserName: ${user}`);
-                console.log(`Password: ${pass}`);
-                if (Platform.OS === "android") {
-                  ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
-                }
-                navigation.navigate("Forms");
-              }
-            }}
+            onPress={handleLogIn}
           >
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
+
+          <Pressable
+            style={styles.button}
+            onPress={handleSignUp}
+          >
+            <Text style={styles.buttonText}>Register</Text>
+          </Pressable>
         </View>
-        {/* </LinearGradient> */}
       </ImageBackground >
     </KeyboardAvoidingView >
   );
