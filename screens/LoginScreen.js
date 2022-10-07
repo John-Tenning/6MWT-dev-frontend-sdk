@@ -27,9 +27,6 @@ const LoginScreen = ({ navigation }) => {
   const [errorUser, setErrorUser] = useState(false);
   const [errorPass, setErrorPass] = useState(false);
 
-  var detailsNotNull = true;
-  var count = 0;
-
   const handleSignUp = () => {
     createUserWithEmailAndPassword(authentication, user, pass)
       .then(() => {
@@ -113,12 +110,12 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
 
-          <Pressable
+          {/* <Pressable
             style={styles.button}
             onPress={handleSignUp}
           >
             <Text style={styles.buttonText}>Register</Text>
-          </Pressable>
+          </Pressable> */}
         </View>
       </ImageBackground >
     </KeyboardAvoidingView >

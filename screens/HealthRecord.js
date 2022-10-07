@@ -1,76 +1,89 @@
 import { Image, Pressable, StyleSheet, Text, View, ScrollView, ImageBackground } from "react-native";
 import React, { useState, useEffect } from "react";
-import { LinearGradient } from "expo-linear-gradient";
+import { db } from '../firebase-config.js';
+import { ref, onValue, push, update, remove } from 'firebase/database';
 
 const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
 const image = require('../assets/bgGradient4.png');
-
 const HealthRecord = ({ navigation }) => {
+
+    const [details, setDetails] = useState(null)
+
+    useEffect(() => {
+        onValue(ref(db, '/Reports/AsgTest01/'), querySnapShot => {
+            let data = querySnapShot.val() || {};
+            // console.log(data)
+            setDetails(data);
+        })
+    }, [])
+
     return (
-        <ScrollView style={styles.container}>
-            {/* <LinearGradient
-                colors={["#a1e1fa", "#3b7197"]}
-                style={{ flex: 1, minHeight: "100%" }}
-            > */}
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <ScrollView style={styles.container}>
                 <View style={styles.wrapper}>
-                    <View style={{ marginTop: 8 }}>
+                    <View style={{ marginTop: 8, flex: 1, height: "100%" }}>
                         <Text style={styles.heading}>Health Record</Text>
                         <Text style={styles.subtext}>Here is a summary of your details</Text>
+                        {!details && <Text style={styles.h2}>Loading...</Text>}
                     </View>
+                    {
+                        details &&
+                        <View>
 
-                    <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
-                        <View style={{ width: "50%", alignItems: "center" }}>
-                            <Text style={[styles.h2, { textAlign: "center", width: "70%" }]}>Average Heart Rate</Text>
-                            <Image
-                                style={styles.imageProp}
-                                source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/20-love-heart-lineal.gif" }}
-                            ></Image>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>75</Text>
-                        </View>
+                            <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
+                                <View style={{ width: "50%", alignItems: "center" }}>
+                                    <Text style={[styles.h2, { textAlign: "center", width: "70%" }]}>Average Heart Rate</Text>
+                                    <Image
+                                        style={styles.imageProp}
+                                        source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/20-love-heart-lineal.gif" }}
+                                    ></Image>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>{details.PM.WP.WP_Avg}</Text>
+                                </View>
 
-                        <View style={styles.colFlex}>
-                            <View>
-                                <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>Resting</Text>
-                                <Text style={[styles.heading, { textAlign: "center" }]}>72</Text>
+                                <View style={styles.colFlex}>
+                                    <View>
+                                        <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>{details.PM.BP.BP_Avg}</Text>
+                                        <Text style={[styles.heading, { textAlign: "center" }]}>72</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>Max</Text>
+                                        <Text style={[styles.heading, { textAlign: "center" }]}>78</Text>
+                                    </View>
+                                </View>
                             </View>
-                            <View>
-                                <Text style={[styles.h2, { textAlign: "center", marginTop: 8 }]}>Max</Text>
-                                <Text style={[styles.heading, { textAlign: "center" }]}>78</Text>
+
+                            <View style={styles.rowFlex}>
+                                <View style={{ width: "33%" }}>
+                                    <Text style={[styles.h2, { textAlign: "center" }]}>1 Min</Text>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>60</Text>
+                                </View>
+                                <View style={{ width: "33%" }}>
+                                    <Text style={[styles.h2, { textAlign: "center" }]}>2 Mins</Text>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>75</Text>
+                                </View>
+                                <View style={{ width: "33%" }}>
+                                    <Text style={[styles.h2, { textAlign: "center" }]}>3 Mins</Text>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>80</Text>
+                                </View>
                             </View>
-                        </View>
-                    </View>
 
-                    <View style={styles.rowFlex}>
-                        <View style={{ width: "33%" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>1 Min</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>60</Text>
-                        </View>
-                        <View style={{ width: "33%" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>2 Mins</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>75</Text>
-                        </View>
-                        <View style={{ width: "33%" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>3 Mins</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>80</Text>
-                        </View>
-                    </View>
+                            <View style={[styles.rowFlex, { paddingHorizontal: 24 }]}>
+                                <View style={{ width: "50%", alignItems: "center" }}>
+                                    <Text style={[styles.h2, { textAlign: "center" }]}>Distance Covered</Text>
+                                    <Image
+                                        style={styles.imageProp}
+                                        source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/walk.png" }}
+                                    ></Image>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>95</Text>
+                                </View>
+                                <View style={{ width: "50%", paddingVertical: 48 }}>
+                                    <Text style={[styles.h2, { textAlign: "center" }]}>VO2 Max</Text>
+                                    <Text style={[styles.heading, { textAlign: "center" }]}>16</Text>
+                                </View>
+                            </View>
 
-                    <View style={[styles.rowFlex, { paddingHorizontal: 24 }]}>
-                        <View style={{ width: "50%", alignItems: "center" }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>Distance Covered</Text>
-                            <Image
-                                style={styles.imageProp}
-                                source={{ uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/walk.png" }}
-                            ></Image>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>95</Text>
                         </View>
-                        <View style={{ width: "50%", paddingVertical: 48 }}>
-                            <Text style={[styles.h2, { textAlign: "center" }]}>VO2 Max</Text>
-                            <Text style={[styles.heading, { textAlign: "center" }]}>16</Text>
-                        </View>
-                    </View>
-
+                    }
                     <Pressable
                         style={styles.button}
                         onPress={() => {
@@ -81,9 +94,8 @@ const HealthRecord = ({ navigation }) => {
                         <Text style={styles.buttonText}>Generate Report</Text>
                     </Pressable>
                 </View>
-            </ImageBackground>
-            {/* </LinearGradient> */}
-        </ScrollView >
+            </ScrollView >
+        </ImageBackground>
     );
 };
 
@@ -100,6 +112,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         display: "flex",
         height: "100%",
+        flex: 1,
     },
     heading: {
         fontSize: 48,
