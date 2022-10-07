@@ -9,6 +9,7 @@ import TimerScreen from "./screens/TimerScreen";
 import HealthRecord from "./screens/HealthRecord";
 import TestScreen from "./screens/TestScreen";
 
+import Pdf from"./screens/Pdf.js";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -19,7 +20,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+<<<<<<< HEAD
         <Stack.Screen name="Test" component={TestScreen} />
+=======
+        <Stack.Screen name="PDF" component={Pdf} />
+>>>>>>> c7d324a6631464ba2d299cf85174032aedcee3d4
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Forms" component={Forms} />
         <Stack.Screen name="Timer" component={TimerScreen} />
