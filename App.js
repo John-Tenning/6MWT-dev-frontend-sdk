@@ -7,6 +7,7 @@ import LoginScreen from "./screens/LoginScreen";
 import Forms from "./screens/Forms";
 import TimerScreen from "./screens/TimerScreen";
 import HealthRecord from "./screens/HealthRecord";
+import TestScreen from "./screens/TestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Test" component={TestScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Forms" component={Forms} />
         <Stack.Screen name="Timer" component={TimerScreen} />
