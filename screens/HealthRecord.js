@@ -88,6 +88,7 @@ const HealthRecord = ({ navigation }) => {
                         style={styles.button}
                         onPress={() => {
                             console.log("Report Generated");
+                            // todo: change Login to Pdf for navigation
                             navigation.navigate("Login");
                         }}
                     >
