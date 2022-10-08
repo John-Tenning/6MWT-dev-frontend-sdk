@@ -38,6 +38,7 @@ const TimerScreen = ({ navigation }) => {
           <Pressable
             style={styles.nextButton}
             onPress={() => {
+              // setIsPlaying(false);
               navigation.replace("Health");
             }}
           >
@@ -75,6 +76,14 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             setKey((prevKey) => prevKey + 1);
             setIsPlaying(false);
             console.log("Done");
+            update(ref(db, "/Device_Status/P01"), {
+              CMD: cmd,
+            });
+            if (cmd === "W") {
+              update(ref(db, "/Device_Status/S01"), {
+                CMD: cmd,
+              });
+            }
             Alert.alert(timerName + " Timer Complete");
           }}
         >
@@ -97,14 +106,6 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
                 isPlaying === false
                   ? () => {
                       setIsPlaying(true);
-                      update(ref(db, "/Device_Status/P01"), {
-                        CMD: cmd,
-                      });
-                      if (cmd === "W") {
-                        update(ref(db, "/Device_Status/S01"), {
-                          CMD: cmd,
-                        });
-                      }
                     }
                   : () => setIsPlaying(false)
               }
