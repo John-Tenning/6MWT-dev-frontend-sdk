@@ -27,9 +27,9 @@ const TimerScreen = ({ navigation }) => {
             <Text style={styles.subtext}>Timer Screen</Text>
           </View>
 
-          <CustomTimer dur={60} timerName={"First"} />
-          <CustomTimer dur={120} timerName={"Second"} />
-          <CustomTimer dur={180} timerName={"Third"} />
+          <CustomTimer dur={60} timerName={"Resting"} />
+          <CustomTimer dur={120} timerName={"Walking"} />
+          <CustomTimer dur={180} timerName={"Recovery"} />
 
           <Pressable
             style={styles.nextButton}

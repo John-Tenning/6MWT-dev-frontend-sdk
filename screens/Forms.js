@@ -12,8 +12,9 @@ import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDropDown from "../components/CustomDropDown";
-import { authentication } from "../firebase-config";
+import { authentication, db } from "../firebase-config";
 import { signOut } from "firebase/auth";
+import { ref, onValue, push, update, remove, set } from 'firebase/database';
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -50,17 +51,17 @@ const Forms = ({ navigation }) => {
   useEffect(() => {
     hadDiagnosis === "yes"
       ? (setDiagOptOptionValues([
-        { label: "Post CABG Patients and HF", value: "Post" },
+        { label: "Post CABG Patients and HF", value: "CABG" },
         { label: "NYHA Class II-III HF", value: "NYHA" },
-        { label: "Advanced Symptomatic HF", value: "Adv" },
-        { label: "Elderly and Clinical", value: "EnC" },
+        { label: "Advanced Symptomatic HF", value: "ADV" },
+        { label: "Elderly and Clinical", value: "EC" },
       ]),
         setDiagOpt(""))
       : hadDiagnosis === "no"
         ? (setDiagOptOptionValues([
           { label: "Young to Middle Age", value: "YMA" },
           { label: "Middle age - Seniority", value: "MAS" },
-          { label: "Elderly", value: "Eld" },
+          { label: "Elderly", value: "ELD" },
         ]),
           setDiagOpt(""))
         : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
@@ -220,6 +221,23 @@ const Forms = ({ navigation }) => {
                   console.log(`Had Medical Diagnosis: ${hadDiagnosis}`);
                   console.log("Medical Diagnosis: " + diagOpt);
                   // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
+
+                  set(ref(db, '/Details/' + patientID), {
+                    PatientID: patientID,
+                    Name: name,
+                    Age: age,
+                    Gender: gender,
+                    Weight: weight,
+                    Height: height,
+                    BMI: (weight / (height * height)) * 10000,
+                    DiagnosisDescription: diagnosis,
+                    HadDiagnosis: hadDiagnosis,
+                    DiagnosisOption: diagOpt
+                  })
+
+                  update(ref(db, '/Device_Status/P01'), {
+                    CPID: patientID,
+                  })
 
                   navigation.navigate("Timer");
                 }
