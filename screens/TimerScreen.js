@@ -8,13 +8,17 @@ import {
   ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
+import { db } from "../firebase-config.js";
+import { ref, onValue, push, update, remove } from "firebase/database";
 // Reference: https://openbase.com/js/react-native-countdown-circle-timer
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo } from "@expo/vector-icons";
 
-const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
-const image = require('../assets/bgGradient4.png');
+const image2 = {
+  uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
+};
+const image = require("../assets/bgGradient4.png");
 
 const TimerScreen = ({ navigation }) => {
   return (
@@ -27,9 +31,9 @@ const TimerScreen = ({ navigation }) => {
             <Text style={styles.subtext}>Timer Screen</Text>
           </View>
 
-          <CustomTimer dur={60} timerName={"Resting"} />
-          <CustomTimer dur={120} timerName={"Walking"} />
-          <CustomTimer dur={180} timerName={"Recovery"} />
+          <CustomTimer dur={60} timerName={"Resting"} cmd={"B"} />
+          <CustomTimer dur={120} timerName={"Walking"} cmd={"W"} />
+          <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
 
           <Pressable
             style={styles.nextButton}
@@ -48,7 +52,7 @@ const TimerScreen = ({ navigation }) => {
 
 export default TimerScreen;
 
-const CustomTimer = ({ dur, timerName }) => {
+const CustomTimer = ({ dur, timerName, cmd }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [key, setKey] = useState(0);
 
@@ -76,7 +80,11 @@ const CustomTimer = ({ dur, timerName }) => {
         >
           {({ remainingTime, color }) => (
             <View>
-              <Text style={{ color: "#04454C", fontSize: 28, fontWeight: "600" }}>{remainingTime}</Text>
+              <Text
+                style={{ color: "#04454C", fontSize: 28, fontWeight: "600" }}
+              >
+                {remainingTime}
+              </Text>
             </View>
           )}
         </CountdownCircleTimer>
@@ -87,7 +95,17 @@ const CustomTimer = ({ dur, timerName }) => {
               style={styles.iconButton}
               onPress={
                 isPlaying === false
-                  ? () => setIsPlaying(true)
+                  ? () => {
+                      setIsPlaying(true);
+                      update(ref(db, "/Device_Status/P01"), {
+                        CMD: cmd,
+                      });
+                      if (cmd === "W") {
+                        update(ref(db, "/Device_Status/S01"), {
+                          CMD: cmd,
+                        });
+                      }
+                    }
                   : () => setIsPlaying(false)
               }
             >

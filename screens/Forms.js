@@ -233,11 +233,11 @@ const Forms = ({ navigation }) => {
                     DiagnosisDescription: diagnosis,
                     HadDiagnosis: hadDiagnosis,
                     DiagnosisOption: diagOpt
-                  })
+                  });
 
                   update(ref(db, '/Device_Status/P01'), {
                     CPID: patientID,
-                  })
+                  });
 
                   navigation.replace("Timer");
                 }
