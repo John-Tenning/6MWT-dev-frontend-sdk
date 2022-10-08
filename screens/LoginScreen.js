@@ -14,19 +14,36 @@ import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "react-navigation-stack";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { authentication } from "../firebase-config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const image2 = { uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png" };
-const image = require('../assets/bgGradient4.png');
+const image2 = {
+  uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
+};
+const image = require("../assets/bgGradient4.png");
 
 const LoginScreen = ({ navigation }) => {
   const [user, setuser] = useState("");
   const [pass, setpass] = useState("");
   const [errorUser, setErrorUser] = useState(false);
   const [errorPass, setErrorPass] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState("eye");
 
+  const handlePasswordVisibility = () => {
+    if (rightIcon === "eye") {
+      setRightIcon("eye-off");
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === "eye-off") {
+      setRightIcon("eye");
+      setPasswordVisibility(!passwordVisibility);
+    }
+  };
   const handleSignUp = () => {
     createUserWithEmailAndPassword(authentication, user, pass)
       .then(() => {
@@ -36,21 +53,25 @@ const LoginScreen = ({ navigation }) => {
       .catch((error) => {
         alert(error.message);
 
-        if (error.code == 'auth/invalid-email' ||
-          error.code == 'auth/email-already-in-use') {
+        if (
+          error.code == "auth/invalid-email" ||
+          error.code == "auth/email-already-in-use"
+        ) {
           setErrorUser(true);
         } else {
           setErrorUser(false);
         }
 
-        if (error.code == 'auth/internal-error' ||
-          error.code == 'auth/weak-password') {
+        if (
+          error.code == "auth/internal-error" ||
+          error.code == "auth/weak-password"
+        ) {
           setErrorPass(true);
         } else {
           setErrorPass(false);
         }
-      })
-  }
+      });
+  };
 
   const handleLogIn = () => {
     signInWithEmailAndPassword(authentication, user, pass)
@@ -61,26 +82,30 @@ const LoginScreen = ({ navigation }) => {
       .catch((error) => {
         alert(error.message);
 
-        if (error.code == 'auth/invalid-email' ||
-          error.code == 'auth/user-not-found') {
+        if (
+          error.code == "auth/invalid-email" ||
+          error.code == "auth/user-not-found"
+        ) {
           setErrorUser(true);
         } else {
           setErrorUser(false);
         }
 
-        if (error.code == 'auth/internal-error' ||
-          error.code == 'auth/wrong-password') {
+        if (
+          error.code == "auth/internal-error" ||
+          error.code == "auth/wrong-password"
+        ) {
           setErrorPass(true);
         } else {
           setErrorPass(false);
         }
-      })
-  }
+      });
+  };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={(Platform.OS === 'ios') ? "padding" : null}
+      behavior={Platform.OS === "ios" ? "padding" : null}
     >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <Image
@@ -96,17 +121,24 @@ const LoginScreen = ({ navigation }) => {
               placeholder="Username"
               capitalize={false}
             />
-            <CustomTextInput
-              valueState={[pass, setpass]}
-              errorState={[errorPass, setErrorPass]}
-              placeholder="Password"
-              isSecure={true}
-            />
+            <View style = {styles.eye}>
+              <CustomTextInput
+                valueState={[pass, setpass]}
+                errorState={[errorPass, setErrorPass]}
+                placeholder="Password"
+                isSecure={passwordVisibility}
+              />
+              <Pressable onPress={handlePasswordVisibility}>
+                <MaterialCommunityIcons
+                  name={rightIcon}
+                  size={22}
+                  color="#232323"
+                  style={styles.icon}
+                />
+              </Pressable>
+            </View>
           </View>
-          <Pressable
-            style={styles.button}
-            onPress={handleLogIn}
-          >
+          <Pressable style={styles.button} onPress={handleLogIn}>
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
 
@@ -117,8 +149,8 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Register</Text>
           </Pressable> */}
         </View>
-      </ImageBackground >
-    </KeyboardAvoidingView >
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -167,4 +199,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
+  eye : {
+    flexDirection: "row",
+  } , 
+  icon: {
+    position: "absolute",
+    paddingVertical: 16,
+
+  }
 });

@@ -195,6 +195,16 @@ const HealthRecord = ({ navigation }) => {
                             >
                                 <Text style={styles.buttonText}>Generate Report</Text>
                             </Pressable>
+                            <Pressable
+                                style={styles.button}
+                                onPress={() => {
+                                    // console.log("Report Generated");
+                                    navigation.navigate("Forms");
+                                    // generatePdf();
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Sign Out</Text>
+                            </Pressable>
 
                         </View>
                     }
