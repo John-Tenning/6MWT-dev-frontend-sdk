@@ -79,13 +79,13 @@ const Forms = ({ navigation }) => {
 
   const handleSignOut = () => {
     signOut(authentication)
-    .then(() => {
-      alert("Sign Out Successful");
-      navigation.replace("Login");
-    })
-    .catch((error) => {
-      alert(error);
-    })
+      .then(() => {
+        alert("Sign Out Successful");
+        navigation.replace("Login");
+      })
+      .catch((error) => {
+        alert(error);
+      })
   }
 
   return (
@@ -239,7 +239,7 @@ const Forms = ({ navigation }) => {
                     CPID: patientID,
                   })
 
-                  navigation.navigate("Timer");
+                  navigation.replace("Timer");
                 }
               }}
             >

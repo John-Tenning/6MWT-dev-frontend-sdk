@@ -104,7 +104,7 @@ const HealthRecord = ({ navigation }) => {
             base64: false,
         })
 
-        const pdfName = `${file.uri.slice(0,file.uri.lastIndexOf('/') + 1)}${details.PatientID}_Report.pdf`
+        const pdfName = `${file.uri.slice(0, file.uri.lastIndexOf('/') + 1)}${details.PatientID}_Report.pdf`
         await FileSystem.moveAsync({
             from: file.uri,
             to: pdfName,
@@ -189,7 +189,6 @@ const HealthRecord = ({ navigation }) => {
                                 style={styles.button}
                                 onPress={() => {
                                     console.log("Report Generated");
-                                    // navigation.navigate("Forms");
                                     generatePdf();
                                 }}
                             >
@@ -198,12 +197,10 @@ const HealthRecord = ({ navigation }) => {
                             <Pressable
                                 style={styles.button}
                                 onPress={() => {
-                                    // console.log("Report Generated");
-                                    navigation.navigate("Forms");
-                                    // generatePdf();
+                                    navigation.replace("Forms");
                                 }}
                             >
-                                <Text style={styles.buttonText}>Sign Out</Text>
+                                <Text style={styles.buttonText}>Next Patient</Text>
                             </Pressable>
 
                         </View>

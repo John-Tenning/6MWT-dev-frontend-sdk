@@ -121,18 +121,19 @@ const LoginScreen = ({ navigation }) => {
               placeholder="Username"
               capitalize={false}
             />
-            <View style = {styles.eye}>
+            <View style={styles.eye}>
               <CustomTextInput
                 valueState={[pass, setpass]}
                 errorState={[errorPass, setErrorPass]}
                 placeholder="Password"
                 isSecure={passwordVisibility}
+                passw
               />
               <Pressable onPress={handlePasswordVisibility}>
                 <MaterialCommunityIcons
                   name={rightIcon}
-                  size={22}
-                  color="#232323"
+                  size={32}
+                  color="#2A2A2A"
                   style={styles.icon}
                 />
               </Pressable>
@@ -199,12 +200,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  eye : {
+  eye: {
     flexDirection: "row",
-  } , 
+    alignItems: "center",
+  },
   icon: {
-    position: "absolute",
-    paddingVertical: 16,
-
+    margin: 8,
+    padding: 8,
+    marginLeft: 18,
+    backgroundColor: "#f3f2f860",
+    borderColor: "#f3f2f860",
+    borderWidth: 1,
+    borderRadius: 16,
+    overflow: 'hidden',
   }
 });

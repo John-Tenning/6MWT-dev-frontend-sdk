@@ -34,7 +34,7 @@ const TimerScreen = ({ navigation }) => {
           <Pressable
             style={styles.nextButton}
             onPress={() => {
-              navigation.navigate("Health");
+              navigation.replace("Health");
             }}
           >
             <Text style={styles.nextButtonText}>Next</Text>

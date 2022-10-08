@@ -10,6 +10,7 @@ const CustomTextInput = ({
   isSecure = false,
   capitalize = true,
   number = false,
+  passw = false,
 }) => {
   const [value, setValue] = valueState;
   const [error, setError] = errorState;
@@ -21,7 +22,7 @@ const CustomTextInput = ({
       borderColor: error ? "#FA0000" : "#f3f2f800",
       borderWidth: 1,
       borderRadius: 16,
-      width: isHalf ? "48%" : "100%",
+      width: passw ? "80%" : isHalf ? "48%" : "100%",
       marginVertical: 8,
       marginLeft: isHalf ? 8 : 0,
       fontSize: mode == 0 ? 16 : 18,
