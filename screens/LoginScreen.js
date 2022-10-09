@@ -22,6 +22,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const image2 = {
@@ -107,82 +108,82 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    // <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style = {styles.container}>
-    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <ScrollView style={styles.container}>
-        <View style={styles.wrapper}>
-          <Image
-            style={styles.imageCover}
-            source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
-          ></Image>
-          <View>
-            <View>
-              <Text style={styles.heading}>6MWT</Text>
-              <CustomTextInput
-                valueState={[user, setuser]}
-                errorState={[errorUser, setErrorUser]}
-                placeholder="Username"
-                capitalize={false}
-              />
-              <View style={styles.eye}>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1 }}>
+          <ScrollView style={styles.container}>
+            <Image
+              style={styles.imageCover}
+              source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
+            ></Image>
+            <View style={styles.wrapper}>
+              <View>
+                <Text style={styles.heading}>6MWT</Text>
                 <CustomTextInput
-                  valueState={[pass, setpass]}
-                  errorState={[errorPass, setErrorPass]}
-                  placeholder="Password"
-                  isSecure={passwordVisibility}
-                  passw
+                  valueState={[user, setuser]}
+                  errorState={[errorUser, setErrorUser]}
+                  placeholder="Username"
+                  capitalize={false}
                 />
-                <Pressable onPress={handlePasswordVisibility}>
-                  <MaterialCommunityIcons
-                    name={rightIcon}
-                    size={32}
-                    color="#2A2A2A"
-                    style={styles.icon}
+                <View style={styles.eye}>
+                  <CustomTextInput
+                    valueState={[pass, setpass]}
+                    errorState={[errorPass, setErrorPass]}
+                    placeholder="Password"
+                    isSecure={passwordVisibility}
+                    passw
                   />
-                </Pressable>
+                  <Pressable onPress={handlePasswordVisibility}>
+                    <MaterialCommunityIcons
+                      name={rightIcon}
+                      size={32}
+                      color="#2A2A2A"
+                      style={styles.icon}
+                    />
+                  </Pressable>
+                </View>
+              </View>
+              <Pressable style={styles.button} onPress={handleLogIn}>
+                <Text style={styles.buttonText}>Login</Text>
+              </Pressable>
+              {/* <Pressable
+                  style={styles.button}
+                  onPress={handleSignUp}
+                  >
+                  <Text style={styles.buttonText}>Register</Text>
+                  </Pressable> */}
+              <View style={styles.done}>
+                <Text style={styles.head2}>This app is created by</Text>
+                <Text
+                  style={styles.text}
+                  onPress={() =>
+                    Linking.openURL("https://www.linkedin.com/in/sashti-amar/")
+                  }
+                >
+                  Sashti Amar
+                </Text>
+                <Text
+                  style={styles.text}
+                  onPress={() =>
+                    Linking.openURL("https://www.linkedin.com/in/jeyam-palaniappan-527856194/")
+                  }
+                >
+                  Jeyam Palaniappan
+                </Text>
+                <Text
+                  style={styles.text}
+                  onPress={() =>
+                    Linking.openURL("https://www.linkedin.com/in/tgashwinkumar/")
+                  }
+                >
+                  Ashwin Kumar
+                </Text>
               </View>
             </View>
-            <Pressable style={styles.button} onPress={handleLogIn}>
-              <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
-            {/* <Pressable
-            style={styles.button}
-            onPress={handleSignUp}
-            >
-            <Text style={styles.buttonText}>Register</Text>
-            </Pressable> */}
-            <View style={styles.done}>
-              <Text style={styles.head2}>This app is created by</Text>
-              <Text
-                style={styles.text}
-                onPress={() =>
-                  Linking.openURL("https://www.linkedin.com/in/sashti-amar/")
-                }
-              >
-                Sashti Amar
-              </Text>
-              <Text
-                style={styles.text}
-                onPress={() =>
-                  Linking.openURL("https://www.linkedin.com/in/jeyam-palaniappan-527856194/")
-                }
-              >
-                Jeyam Palaniappan
-              </Text>
-              <Text
-                style={styles.text}
-                onPress={() =>
-                  Linking.openURL("https://www.linkedin.com/in/tgashwinkumar/")
-                }
-              >
-                Ashwin Kumar
-              </Text>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </ImageBackground>
-    // </KeyboardAvoidingView>
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -198,13 +199,14 @@ const styles = StyleSheet.create({
   },
   imageCover: {
     // paddingLeft: 0,
-    height: 500,
+    height: 475,
     width: 390,
     flex: 1,
+    marginTop: -15,
   },
   wrapper: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingBottom: 16,
   },
   heading: {
     fontSize: 48,
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 8,
     paddingVertical: 2,
-    textDecorationLine : "underline",
+    textDecorationLine: "underline",
   },
   head2: {
     color: "white",
