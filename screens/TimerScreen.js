@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 48,
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     minHeight: "100%",
   },
   heading: {

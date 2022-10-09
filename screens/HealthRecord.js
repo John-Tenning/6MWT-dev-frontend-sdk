@@ -28,7 +28,6 @@ const HealthRecord = ({ navigation }) => {
     const [details, setDetails] = useState(null)
     const [vo2, setvo2] = useState(null)
 
-    const min = 6 // CABG
     // Elderly - No formula
 
     useEffect(() => {
@@ -71,11 +70,11 @@ const HealthRecord = ({ navigation }) => {
             }
 
             if (details.DiagnosisOption === 'CABG') {
-                let calc = 3.5 + (report.GM.DC.DC_Total / min * 0.1);
+                let calc = 3.5 + report.GM.DC.DC_Total;
                 setvo2(calc.toFixed(2));
             }
 
-            if (details.DiagnosisOption === 'MAS' || details.DiagnosisOption === 'YMA') {
+            if (details.DiagnosisOption === 'MAS' || details.DiagnosisOption === 'YMA'  || details.DiagnosisOption === 'ELD') {
                 let sex = details.Gender === 'male' ? 0 : 1;
                 let calc = 70.161 + (0.023 * report.GM.DC.DC_Total) - (0.276 * details.Weight) - (6.79 * sex) - (0.193 * report.PM.BP.BP_Avg) - (0.191 * details.Age);
                 setvo2(calc.toFixed(2));
