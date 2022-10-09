@@ -9,6 +9,8 @@ import {
   ImageBackground,
   Alert,
   KeyboardAvoidingView,
+  ScrollView,
+  Linking,
 } from "react-native";
 import React, { useState } from "react";
 import CustomTextInput from "../components/CustomTextInput";
@@ -105,55 +107,82 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : null}
-    >
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <Image
-          style={styles.imageCover}
-          source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
-        ></Image>
+    // <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style = {styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <ScrollView style={styles.container}>
         <View style={styles.wrapper}>
+          <Image
+            style={styles.imageCover}
+            source={{ uri: "https://i.ibb.co/bsx8sLV/login-background.png" }}
+          ></Image>
           <View>
-            <Text style={styles.heading}>6MWT</Text>
-            <CustomTextInput
-              valueState={[user, setuser]}
-              errorState={[errorUser, setErrorUser]}
-              placeholder="Username"
-              capitalize={false}
-            />
-            <View style={styles.eye}>
+            <View>
+              <Text style={styles.heading}>6MWT</Text>
               <CustomTextInput
-                valueState={[pass, setpass]}
-                errorState={[errorPass, setErrorPass]}
-                placeholder="Password"
-                isSecure={passwordVisibility}
-                passw
+                valueState={[user, setuser]}
+                errorState={[errorUser, setErrorUser]}
+                placeholder="Username"
+                capitalize={false}
               />
-              <Pressable onPress={handlePasswordVisibility}>
-                <MaterialCommunityIcons
-                  name={rightIcon}
-                  size={32}
-                  color="#2A2A2A"
-                  style={styles.icon}
+              <View style={styles.eye}>
+                <CustomTextInput
+                  valueState={[pass, setpass]}
+                  errorState={[errorPass, setErrorPass]}
+                  placeholder="Password"
+                  isSecure={passwordVisibility}
+                  passw
                 />
-              </Pressable>
+                <Pressable onPress={handlePasswordVisibility}>
+                  <MaterialCommunityIcons
+                    name={rightIcon}
+                    size={32}
+                    color="#2A2A2A"
+                    style={styles.icon}
+                  />
+                </Pressable>
+              </View>
             </View>
-          </View>
-          <Pressable style={styles.button} onPress={handleLogIn}>
-            <Text style={styles.buttonText}>Login</Text>
-          </Pressable>
-
-          {/* <Pressable
+            <Pressable style={styles.button} onPress={handleLogIn}>
+              <Text style={styles.buttonText}>Login</Text>
+            </Pressable>
+            {/* <Pressable
             style={styles.button}
             onPress={handleSignUp}
-          >
+            >
             <Text style={styles.buttonText}>Register</Text>
-          </Pressable> */}
+            </Pressable> */}
+            <View style={styles.done}>
+              <Text style={styles.head2}>This app is created by</Text>
+              <Text
+                style={styles.text}
+                onPress={() =>
+                  Linking.openURL("https://www.linkedin.com/in/sashti-amar/")
+                }
+              >
+                Sashti Amar
+              </Text>
+              <Text
+                style={styles.text}
+                onPress={() =>
+                  Linking.openURL("https://www.linkedin.com/in/jeyam-palaniappan-527856194/")
+                }
+              >
+                Jeyam Palaniappan
+              </Text>
+              <Text
+                style={styles.text}
+                onPress={() =>
+                  Linking.openURL("https://www.linkedin.com/in/tgashwinkumar/")
+                }
+              >
+                Ashwin Kumar
+              </Text>
+            </View>
+          </View>
         </View>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+      </ScrollView>
+    </ImageBackground>
+    // </KeyboardAvoidingView>
   );
 };
 
@@ -162,12 +191,15 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   linearBackground: {
     flex: 1,
   },
   imageCover: {
+    // paddingLeft: 0,
+    height: 500,
+    width: 390,
     flex: 1,
   },
   wrapper: {
@@ -214,6 +246,24 @@ const styles = StyleSheet.create({
     borderColor: "#f3f2f860",
     borderWidth: 1,
     borderRadius: 16,
-    overflow: 'hidden',
-  }
+    overflow: "hidden",
+  },
+  text: {
+    color: "white",
+    fontSize: 16,
+    paddingLeft: 8,
+    paddingVertical: 2,
+    textDecorationLine : "underline",
+  },
+  head2: {
+    color: "white",
+    fontSize: 16,
+    padding: 12,
+  },
+  done: {
+    padding: 8,
+    backgroundColor: "#f3f2f860",
+    borderRadius: 16,
+    marginVertical: 8,
+  },
 });
