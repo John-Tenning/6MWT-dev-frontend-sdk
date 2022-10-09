@@ -15,6 +15,7 @@ import CustomDropDown from "../components/CustomDropDown";
 import { authentication, db } from "../firebase-config";
 import { signOut } from "firebase/auth";
 import { ref, onValue, push, update, remove, set } from 'firebase/database';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -94,168 +95,158 @@ const Forms = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : null}
     >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <ScrollView style={styles.container}>
-          {/* <LinearGradient colors={["#ffffff", "#C1C1C1"]} style={{ flex: 1, minHeight: "100%" }}> */}
-          <View style={styles.wrapper}>
-            <Text style={styles.heading}>Patient Details</Text>
-            <Text style={styles.subtext}>Enter the required details</Text>
-            <CustomTextInput
-              mode={1}
-              valueState={[patientID, setPatientID]}
-              errorState={[errorPID, setErrorPID]}
-              placeholder="Patient ID"
-            />
-            <CustomTextInput
-              mode={1}
-              valueState={[name, setName]}
-              errorState={[errorName, setErrorName]}
-              placeholder="Name"
-            />
-            <View style={styles.align}>
+        <SafeAreaView edges={['right', 'left', 'top']} style={{ flex: 1 }}>
+          <ScrollView style={styles.container}>
+            <View style={styles.wrapper}>
+              <Text style={styles.heading}>Patient Details</Text>
+              <Text style={styles.subtext}>Enter the required details</Text>
               <CustomTextInput
                 mode={1}
-                valueState={[age, setAge]}
-                errorState={[errorAge, setErrorAge]}
-                placeholder="Age"
-                isHalf
-                number={true}
+                valueState={[patientID, setPatientID]}
+                errorState={[errorPID, setErrorPID]}
+                placeholder="Patient ID"
+              />
+              <CustomTextInput
+                mode={1}
+                valueState={[name, setName]}
+                errorState={[errorName, setErrorName]}
+                placeholder="Name"
+              />
+              <View style={styles.align}>
+                <CustomTextInput
+                  mode={1}
+                  valueState={[age, setAge]}
+                  errorState={[errorAge, setErrorAge]}
+                  placeholder="Age"
+                  isHalf
+                  number={true}
+                />
+                <CustomDropDown
+                  placeholder={"Gender"}
+                  options={genderOptions}
+                  valueState={[gender, setGender]}
+                  errorState={[errorGender, setErrorGender]}
+                  isHalf
+                  mode={1}
+                />
+              </View>
+              <View style={styles.align}>
+                <CustomTextInput
+                  mode={1}
+                  valueState={[weight, setWeight]}
+                  errorState={[errorWeight, setErrorWeight]}
+                  placeholder="Weight"
+                  isHalf
+                  number={true}
+                />
+                <CustomTextInput
+                  mode={1}
+                  valueState={[height, setHeight]}
+                  errorState={[errorHeight, setErrorHeight]}
+                  placeholder="Height"
+                  isHalf
+                  number={true}
+                />
+              </View>
+              <View>
+                <CustomTextInput
+                  mode={1}
+                  valueState={[diagnosis, setDiagnosis]}
+                  errorState={[errorDiagnosis, setErrorDiagnosis]}
+                  placeholder="Diagnosis"
+                />
+              </View>
+              <CustomDropDown
+                placeholder={"Had medical diagnosis ?"}
+                options={diagnosisOptions}
+                valueState={[hadDiagnosis, setHadDiagnosis]}
+                errorState={[errorHadDiagnosis, setErrorHadDiagnosis]}
+                mode={1}
               />
               <CustomDropDown
-                placeholder={"Gender"}
-                options={genderOptions}
-                valueState={[gender, setGender]}
-                errorState={[errorGender, setErrorGender]}
-                isHalf
+                placeholder={"Medical Diagnosis"}
+                options={diagOptOptionValues}
+                valueState={[diagOpt, setDiagOpt]}
+                errorState={[errorDiagOpt, setErrorDiagOpt]}
                 mode={1}
               />
+              <Pressable
+                style={styles.button}
+                onPress={() => {
+                  count = 0;
+
+                  patientID.length <= 0
+                    ? (setErrorPID(true), count++)
+                    : setErrorPID(false);
+                  name.length <= 0
+                    ? (setErrorName(true), count++)
+                    : setErrorName(false);
+                  isNaN(+age) || age === null
+                    ? (setErrorAge(true), count++)
+                    : setErrorAge(false);
+                  gender === null
+                    ? (setErrorGender(true), count++)
+                    : setErrorGender(false);
+                  isNaN(+weight) || weight === null
+                    ? (setErrorWeight(true), count++)
+                    : setErrorWeight(false);
+                  isNaN(+height) || height === null
+                    ? (setErrorHeight(true), count++)
+                    : setErrorHeight(false);
+                  diagnosis.length <= 0
+                    ? (setErrorDiagnosis(true), count++)
+                    : setErrorDiagnosis(false);
+                  hadDiagnosis === null
+                    ? (setErrorHadDiagnosis(true), count++)
+                    : setErrorHadDiagnosis(false);
+                  diagOpt.length <= 0
+                    ? (setErrorDiagOpt(true), count++)
+                    : setErrorDiagOpt(false);
+
+                  if (count > 0) {
+                    detailsNotNull = false;
+                    Alert.alert("Enter Valid Details");
+                  } else {
+                    detailsNotNull = true;
+                  }
+
+                  if (detailsNotNull) {
+                    let bmi = ((weight / (height * height)) * 10000).toFixed(2);
+
+                    set(ref(db, '/Details/' + patientID), {
+                      PatientID: patientID,
+                      Name: name,
+                      Age: age,
+                      Gender: gender,
+                      Weight: weight,
+                      Height: height,
+                      BMI: bmi,
+                      DiagnosisDescription: diagnosis,
+                      HadDiagnosis: hadDiagnosis,
+                      DiagnosisOption: diagOpt
+                    });
+
+                    update(ref(db, '/Device_Status/P01'), {
+                      CPID: patientID,
+                    });
+
+                    navigation.replace("Timer");
+                  }
+                }}
+              >
+                <Text style={styles.buttonText}>Submit</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.button}
+                onPress={handleSignOut}
+              >
+                <Text style={styles.buttonText}>Sign Out</Text>
+              </Pressable>
+
             </View>
-            <View style={styles.align}>
-              <CustomTextInput
-                mode={1}
-                valueState={[weight, setWeight]}
-                errorState={[errorWeight, setErrorWeight]}
-                placeholder="Weight"
-                isHalf
-                number={true}
-              />
-              <CustomTextInput
-                mode={1}
-                valueState={[height, setHeight]}
-                errorState={[errorHeight, setErrorHeight]}
-                placeholder="Height"
-                isHalf
-                number={true}
-              />
-            </View>
-            <View>
-              <CustomTextInput
-                mode={1}
-                valueState={[diagnosis, setDiagnosis]}
-                errorState={[errorDiagnosis, setErrorDiagnosis]}
-                placeholder="Diagnosis"
-              />
-            </View>
-            <CustomDropDown
-              placeholder={"Had medical diagnosis ?"}
-              options={diagnosisOptions}
-              valueState={[hadDiagnosis, setHadDiagnosis]}
-              errorState={[errorHadDiagnosis, setErrorHadDiagnosis]}
-              mode={1}
-            />
-            <CustomDropDown
-              placeholder={"Medical Diagnosis"}
-              options={diagOptOptionValues}
-              valueState={[diagOpt, setDiagOpt]}
-              errorState={[errorDiagOpt, setErrorDiagOpt]}
-              mode={1}
-            />
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                count = 0;
-
-                patientID.length <= 0
-                  ? (setErrorPID(true), count++)
-                  : setErrorPID(false);
-                name.length <= 0
-                  ? (setErrorName(true), count++)
-                  : setErrorName(false);
-                isNaN(+age) || age === null
-                  ? (setErrorAge(true), count++)
-                  : setErrorAge(false);
-                gender === null
-                  ? (setErrorGender(true), count++)
-                  : setErrorGender(false);
-                isNaN(+weight) || weight === null
-                  ? (setErrorWeight(true), count++)
-                  : setErrorWeight(false);
-                isNaN(+height) || height === null
-                  ? (setErrorHeight(true), count++)
-                  : setErrorHeight(false);
-                diagnosis.length <= 0
-                  ? (setErrorDiagnosis(true), count++)
-                  : setErrorDiagnosis(false);
-                hadDiagnosis === null
-                  ? (setErrorHadDiagnosis(true), count++)
-                  : setErrorHadDiagnosis(false);
-                diagOpt.length <= 0
-                  ? (setErrorDiagOpt(true), count++)
-                  : setErrorDiagOpt(false);
-
-                if (count > 0) {
-                  detailsNotNull = false;
-                  Alert.alert("Enter Valid Details");
-                } else {
-                  detailsNotNull = true;
-                }
-
-                if (detailsNotNull) {
-                  console.log("Patient ID: " + patientID);
-                  console.log("Name: " + name);
-                  console.log("Age: " + age);
-                  console.log(`Gender: ${gender}`);
-                  console.log("Weight: " + weight);
-                  console.log("Height: " + height);
-                  console.log("BMI: " + (weight / (height * height)) * 10000);
-                  console.log("Diagnosis: " + diagnosis);
-                  console.log(`Had Medical Diagnosis: ${hadDiagnosis}`);
-                  console.log("Medical Diagnosis: " + diagOpt);
-                  // ToastAndroid.show("Submit Successful", ToastAndroid.SHORT);
-
-                  set(ref(db, '/Details/' + patientID), {
-                    PatientID: patientID,
-                    Name: name,
-                    Age: age,
-                    Gender: gender,
-                    Weight: weight,
-                    Height: height,
-                    BMI: (weight / (height * height)) * 10000,
-                    DiagnosisDescription: diagnosis,
-                    HadDiagnosis: hadDiagnosis,
-                    DiagnosisOption: diagOpt
-                  });
-
-                  update(ref(db, '/Device_Status/P01'), {
-                    CPID: patientID,
-                  });
-
-                  navigation.replace("Timer");
-                }
-              }}
-            >
-              <Text style={styles.buttonText}>Submit</Text>
-            </Pressable>
-
-            <Pressable
-              style={styles.button}
-              onPress={handleSignOut}
-            >
-              <Text style={styles.buttonText}>Sign Out</Text>
-            </Pressable>
-
-          </View>
-          {/* </LinearGradient> */}
-        </ScrollView>
+          </ScrollView>
+        </SafeAreaView>
       </ImageBackground>
     </KeyboardAvoidingView>
   );
@@ -274,7 +265,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     paddingHorizontal: 16,
-    paddingTop: 48,
+    // paddingTop: 48,
     paddingBottom: 32,
     justifyContent: "space-between",
     display: "flex",

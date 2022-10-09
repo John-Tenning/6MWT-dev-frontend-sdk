@@ -14,6 +14,7 @@ import { ref, onValue, push, update, remove } from "firebase/database";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -23,30 +24,31 @@ const image = require("../assets/bgGradient4.png");
 const TimerScreen = ({ navigation }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <ScrollView style={styles.container}>
-        {/* <LinearGradient colors={["#a1e1fa", "#3b7197"]} style={{ flex: 1, minHeight: "100%" }} > */}
-        <View style={styles.wrapper}>
-          <View style={{ marginTop: 8 }}>
-            <Text style={styles.heading}>Timer</Text>
-            <Text style={styles.subtext}>Timer Screen</Text>
+      <SafeAreaView edges={['right', 'left', 'top']} style={{ flex: 1 }}>
+        <ScrollView style={styles.container}>
+          <View style={styles.wrapper}>
+            <View style={{ marginTop: 8 }}>
+              <Text style={styles.heading}>Timer</Text>
+              <Text style={styles.subtext}>Timer Screen</Text>
+            </View>
+
+            <CustomTimer dur={120} timerName={"Resting"} cmd={"B"} />
+            <CustomTimer dur={360} timerName={"Walking"} cmd={"W"} />
+            <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
+
+            <Pressable
+              style={styles.nextButton}
+              onPress={() => {
+                // setIsPlaying(false);
+                navigation.replace("Health");
+              }}
+            >
+              <Text style={styles.nextButtonText}>Next</Text>
+            </Pressable>
           </View>
-
-          <CustomTimer dur={60} timerName={"Resting"} cmd={"B"} />
-          <CustomTimer dur={120} timerName={"Walking"} cmd={"W"} />
-          <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
-
-          <Pressable
-            style={styles.nextButton}
-            onPress={() => {
-              // setIsPlaying(false);
-              navigation.replace("Health");
-            }}
-          >
-            <Text style={styles.nextButtonText}>Next</Text>
-          </Pressable>
-        </View>
-        {/* </LinearGradient> */}
-      </ScrollView>
+          {/* </LinearGradient> */}
+        </ScrollView>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -75,7 +77,7 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             // return { shouldRepeat: true, delay: 1.5 }
             setKey((prevKey) => prevKey + 1);
             setIsPlaying(false);
-            console.log("Done");
+            console.log(timerName + " Timer Complete");
             update(ref(db, "/Device_Status/P01"), {
               CMD: cmd,
             });
@@ -105,8 +107,8 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
               onPress={
                 isPlaying === false
                   ? () => {
-                      setIsPlaying(true);
-                    }
+                    setIsPlaying(true);
+                  }
                   : () => setIsPlaying(false)
               }
             >
@@ -144,9 +146,9 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     paddingHorizontal: 16,
-    paddingVertical: 48,
+    paddingBottom: 48,
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     minHeight: "100%",
   },
   heading: {

@@ -44,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
       setPasswordVisibility(!passwordVisibility);
     }
   };
+
   const handleSignUp = () => {
     createUserWithEmailAndPassword(authentication, user, pass)
       .then(() => {
@@ -80,7 +81,8 @@ const LoginScreen = ({ navigation }) => {
         navigation.replace("Forms");
       })
       .catch((error) => {
-        alert(error.message);
+        // alert(error.message);
+        alert("Invalid Credentials");
 
         if (
           error.code == "auth/invalid-email" ||
