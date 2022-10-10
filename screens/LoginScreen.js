@@ -24,6 +24,7 @@ import {
 } from "firebase/auth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-root-toast";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -80,7 +81,13 @@ const LoginScreen = ({ navigation }) => {
   const handleLogIn = () => {
     signInWithEmailAndPassword(authentication, user, pass)
       .then(() => {
-        alert("Login Successful with " + user);
+        // alert("Login Successful with " + user);
+        const toast = Toast.show(`Login successful with ${user}!`, {
+          duration: 3000,
+          shadow: true,
+          backgroundColor: "#ffffff",
+          textColor: "#0000ff",
+        });
         navigation.replace("Forms");
       })
       .catch((error) => {
@@ -108,9 +115,12 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      style={styles.container}
+    >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1 }}>
+        <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1 }}>
           <ScrollView style={styles.container}>
             <Image
               style={styles.imageCover}
@@ -153,30 +163,41 @@ const LoginScreen = ({ navigation }) => {
                   <Text style={styles.buttonText}>Register</Text>
                   </Pressable> */}
               <View style={styles.done}>
-                <Text style={styles.head2}>This app is created by</Text>
-                <Text
-                  style={styles.text}
-                  onPress={() =>
-                    Linking.openURL("https://www.linkedin.com/in/sashti-amar/")
-                  }
-                >
-                  Sashti Amar
-                </Text>
-                <Text
-                  style={styles.text}
-                  onPress={() =>
-                    Linking.openURL("https://www.linkedin.com/in/jeyam-palaniappan-527856194/")
-                  }
-                >
-                  Jeyam Palaniappan
-                </Text>
-                <Text
-                  style={styles.text}
-                  onPress={() =>
-                    Linking.openURL("https://www.linkedin.com/in/tgashwinkumar/")
-                  }
-                >
-                  Ashwin Kumar
+                <Text style={{ color: "white" }}>
+                  <Text style={styles.head2}>This app is created by </Text>
+                  <Text
+                    style={styles.text}
+                    onPress={() =>
+                      Linking.openURL(
+                        "https://www.linkedin.com/in/sashti-amar/"
+                      )
+                    }
+                  >
+                    Sashti Amar
+                  </Text>
+                  <Text>{", "}</Text>
+                  <Text
+                    style={styles.text}
+                    onPress={() =>
+                      Linking.openURL(
+                        "https://www.linkedin.com/in/jeyam-palaniappan-527856194/"
+                      )
+                    }
+                  >
+                    Jeyam Palaniappan
+                  </Text>
+                  <Text>{", "}</Text>
+
+                  <Text
+                    style={styles.text}
+                    onPress={() =>
+                      Linking.openURL(
+                        "https://www.linkedin.com/in/tgashwinkumar/"
+                      )
+                    }
+                  >
+                    Ashwin Kumar
+                  </Text>
                 </Text>
               </View>
             </View>
@@ -202,7 +223,7 @@ const styles = StyleSheet.create({
     height: 475,
     width: 390,
     flex: 1,
-    marginTop: -15,
+    marginTop: -56,
   },
   wrapper: {
     paddingHorizontal: 16,
@@ -263,7 +284,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   done: {
-    padding: 8,
+    padding: 12,
     backgroundColor: "#f3f2f860",
     borderRadius: 16,
     marginVertical: 8,

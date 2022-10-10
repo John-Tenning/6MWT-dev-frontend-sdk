@@ -8,14 +8,15 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDropDown from "../components/CustomDropDown";
 import { authentication, db } from "../firebase-config";
 import { signOut } from "firebase/auth";
-import { ref, onValue, push, update, remove, set } from 'firebase/database';
+import { ref, onValue, push, update, remove, set } from "firebase/database";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { PatientContext } from "../App";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -49,23 +50,25 @@ const Forms = ({ navigation }) => {
   var detailsNotNull = true;
   var count = 0;
 
+  const { pID, setPID } = useContext(PatientContext);
+
   useEffect(() => {
     hadDiagnosis === "yes"
       ? (setDiagOptOptionValues([
-        { label: "Post CABG Patients and HF", value: "CABG" },
-        { label: "NYHA Class II-III HF", value: "NYHA" },
-        { label: "Advanced Symptomatic HF", value: "ADV" },
-        { label: "Elderly and Clinical", value: "EC" },
-      ]),
+          { label: "Post CABG Patients and HF", value: "CABG" },
+          { label: "NYHA Class II-III HF", value: "NYHA" },
+          { label: "Advanced Symptomatic HF", value: "ADV" },
+          { label: "Elderly and Clinical", value: "EC" },
+        ]),
         setDiagOpt(""))
       : hadDiagnosis === "no"
-        ? (setDiagOptOptionValues([
+      ? (setDiagOptOptionValues([
           { label: "Young to Middle Age", value: "YMA" },
           { label: "Middle age - Seniority", value: "MAS" },
           { label: "Elderly", value: "ELD" },
         ]),
-          setDiagOpt(""))
-        : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
+        setDiagOpt(""))
+      : setDiagOptOptionValues([{ label: "Medical Diagnosis", value: "" }]);
   }, [hadDiagnosis]);
 
   const genderOptions = [
@@ -86,8 +89,8 @@ const Forms = ({ navigation }) => {
       })
       .catch((error) => {
         alert(error);
-      })
-  }
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -95,7 +98,7 @@ const Forms = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : null}
     >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <SafeAreaView edges={['right', 'left', 'top']} style={{ flex: 1 }}>
+        <SafeAreaView edges={["right", "left", "top"]} style={{ flex: 1 }}>
           <ScrollView style={styles.container}>
             <View style={styles.wrapper}>
               <Text style={styles.heading}>Patient Details</Text>
@@ -213,7 +216,9 @@ const Forms = ({ navigation }) => {
                   if (detailsNotNull) {
                     let bmi = ((weight / (height * height)) * 10000).toFixed(2);
 
-                    set(ref(db, '/Details/' + patientID), {
+                    setPID(patientID);
+
+                    set(ref(db, "/Details/" + patientID), {
                       PatientID: patientID,
                       Name: name,
                       Age: age,
@@ -223,12 +228,12 @@ const Forms = ({ navigation }) => {
                       BMI: bmi,
                       DiagnosisDescription: diagnosis,
                       HadDiagnosis: hadDiagnosis,
-                      DiagnosisOption: diagOpt
+                      DiagnosisOption: diagOpt,
                     });
 
-                    update(ref(db, '/Device_Status/P01'), {
-                      CPID: patientID,
-                    });
+                    // update(ref(db, "/Device_Status/P01"), {
+                    //   CPID: patientID,
+                    // });
 
                     navigation.replace("Timer");
                   }
@@ -237,13 +242,9 @@ const Forms = ({ navigation }) => {
                 <Text style={styles.buttonText}>Submit</Text>
               </Pressable>
 
-              <Pressable
-                style={styles.button}
-                onPress={handleSignOut}
-              >
+              <Pressable style={styles.button} onPress={handleSignOut}>
                 <Text style={styles.buttonText}>Sign Out</Text>
               </Pressable>
-
             </View>
           </ScrollView>
         </SafeAreaView>

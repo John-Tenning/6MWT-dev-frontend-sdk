@@ -7,7 +7,7 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { db } from "../firebase-config.js";
 import { ref, onValue, push, update, remove } from "firebase/database";
 // Reference: https://openbase.com/js/react-native-countdown-circle-timer
@@ -15,6 +15,8 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { PatientContext } from "../App.js";
+import Toast from "react-native-root-toast";
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -32,9 +34,9 @@ const TimerScreen = ({ navigation }) => {
               <Text style={styles.subtext}>Timer Screen</Text>
             </View>
 
-            <CustomTimer dur={120} timerName={"Resting"} cmd={"B"} />
-            <CustomTimer dur={360} timerName={"Walking"} cmd={"W"} />
-            <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
+            <CustomTimer dur={12} timerName={"Resting"} cmd={"B"} />
+            <CustomTimer dur={36} timerName={"Walking"} cmd={"W"} />
+            <CustomTimer dur={18} timerName={"Recovery"} cmd={"R"} />
 
             <Pressable
               style={styles.nextButton}
@@ -59,6 +61,8 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [key, setKey] = useState(0);
 
+  const { pID, setPID } = useContext(PatientContext);
+
   return (
     <View style={styles.timerContainer}>
       <View
@@ -78,14 +82,77 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             setKey((prevKey) => prevKey + 1);
             setIsPlaying(false);
             console.log(timerName + " Timer Complete");
-            // update(ref(db, "/Device_Status/P01"), {
-            //   CMD: cmd,
-            // });
-            // if (cmd === "W") {
-            //   update(ref(db, "/Device_Status/S01"), {
-            //     CMD: cmd,
-            //   });
-            // }
+
+            let toast = null;
+            onValue(ref(db, `/Reports/${pID}`), (querySnapShot) => {
+              let data = querySnapShot.val() || {};
+              // console.log("Patient Data", data);
+              if (Object.keys(data).length === 0) {
+                toast = Toast.show("Patient Reports not found", {
+                  duration: 3000,
+                  backgroundColor: "#ffffff",
+                  textColor: "#ff0000",
+                });
+              }
+            });
+
+            setTimeout(
+              () => {
+                if (cmd === "B") {
+                  onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
+                    let data = querySnapShot.val() || {};
+                    if (
+                      Object.keys(data).length === 0 ||
+                      !Object.keys(data).includes("BP")
+                    )
+                      Toast.show("Reports for Resting phase not found.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#ff0000",
+                      });
+                    else
+                      Toast.show("Recovery Phase successfull.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#0000ff",
+                      });
+                  });
+                } else if (cmd === "W") {
+                  onValue(ref(db, `/Reports/${pID}/GM`), (querySnapShot) => {
+                    let data = querySnapShot.val() || {};
+                    if (Object.keys(data).length === 0)
+                      Toast.show("Reports for Walking phase not found.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#ff0000",
+                      });
+                    else
+                      Toast.show("Recovery Phase successfull.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#0000ff",
+                      });
+                  });
+                } else if (cmd === "R") {
+                  onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
+                    let data = querySnapShot.val() || {};
+                    if (!Object.keys(data).includes("WP"))
+                      Toast.show("Reports for Recovery phase not found.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#ff0000",
+                      });
+                    else
+                      Toast.show("Recovery Phase successfull.", {
+                        duration: 3000,
+                        backgroundColor: "#ffffff",
+                        textColor: "#0000ff",
+                      });
+                  });
+                }
+              },
+              toast === null ? 0 : 3000
+            );
             Alert.alert(timerName + " Timer Complete");
           }}
         >
