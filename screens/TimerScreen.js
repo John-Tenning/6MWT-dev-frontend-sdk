@@ -24,7 +24,7 @@ const image = require("../assets/bgGradient4.png");
 const TimerScreen = ({ navigation }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <SafeAreaView edges={['right', 'left', 'top']} style={{ flex: 1 }}>
+      <SafeAreaView edges={["right", "left", "top"]} style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.wrapper}>
             <View style={{ marginTop: 8 }}>
@@ -78,14 +78,14 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             setKey((prevKey) => prevKey + 1);
             setIsPlaying(false);
             console.log(timerName + " Timer Complete");
-            update(ref(db, "/Device_Status/P01"), {
-              CMD: cmd,
-            });
-            if (cmd === "W") {
-              update(ref(db, "/Device_Status/S01"), {
-                CMD: cmd,
-              });
-            }
+            // update(ref(db, "/Device_Status/P01"), {
+            //   CMD: cmd,
+            // });
+            // if (cmd === "W") {
+            //   update(ref(db, "/Device_Status/S01"), {
+            //     CMD: cmd,
+            //   });
+            // }
             Alert.alert(timerName + " Timer Complete");
           }}
         >
@@ -107,8 +107,19 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
               onPress={
                 isPlaying === false
                   ? () => {
-                    setIsPlaying(true);
-                  }
+                      Alert.alert("Your timer will start in 5 seconds");
+                      setTimeout(() => {
+                        setIsPlaying(true);
+                        update(ref(db, "/Device_Status/P01"), {
+                          CMD: cmd,
+                        });
+                        if (cmd === "W") {
+                          update(ref(db, "/Device_Status/S01"), {
+                            CMD: cmd,
+                          });
+                        }
+                      }, 5000);
+                    }
                   : () => setIsPlaying(false)
               }
             >
