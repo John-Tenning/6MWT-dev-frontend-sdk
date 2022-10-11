@@ -90,7 +90,7 @@ const Forms = ({ navigation }) => {
         Toast.show("Sign Out successful", {
           duration: 3000,
           backgroundColor: "#ffffff",
-          textColor: "#ff0000",
+          textColor: "#4BB543",
         });
         navigation.replace("Login");
       })

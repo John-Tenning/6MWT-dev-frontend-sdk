@@ -45,7 +45,6 @@ const HealthRecord = ({ navigation }) => {
   const [details, setDetails] = useState(null);
   const [vo2, setvo2] = useState(null);
 
-  // Elderly - No formula
   const { pID, setPID } = useContext(PatientContext);
 
   useEffect(() => {
@@ -64,32 +63,33 @@ const HealthRecord = ({ navigation }) => {
         update(ref(db, "/Device_Status/S01"), {
           CPID: pID,
         });
+        setCPID(pID);
+      } else {
+        onValue(ref(db, `/Device_Status/P01/CPID`), (querySnapShot) => {
+          let data = querySnapShot.val() || {};
+          setCPID(data);
+          console.log(`CPID: ${data}`);
+        });
       }
-      console.log(data);
     });
   }, []);
 
   useEffect(() => {
-    onValue(ref(db, `/Device_Status/P01/CPID`), (querySnapShot) => {
-      let data = querySnapShot.val() || {};
-      setCPID(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (CPID !== null) {
-      onValue(ref(db, `/Reports/${pID}/`), (querySnapShot) => {
+    if (CPID !== null && pID !== null) {
+      onValue(ref(db, `/Reports/${CPID}/`), (querySnapShot) => {
         let data = querySnapShot.val() || {};
-        if (Object.keys(data).length === 0) {
-          Toast.show("Loading last successful patient details");
-          onValue(ref(db, "/Reports/AsgTest01/"), (querySnapShot) => {
-            let data = querySnapShot.val() || {};
-            setReport(data);
-          });
-        } else setReport(data);
+
+        if (CPID === pID) {
+          console.log("RIGHT DATA");
+          Toast.show("Loading patient details");
+        } else {
+          console.log("WRONG DATA", pID);
+          Toast.show("Importing previous successful data.")
+        };
+        setReport(data);
       });
 
-      onValue(ref(db, `/Details/${pID}/`), (querySnapShot) => {
+      onValue(ref(db, `/Details/${CPID}/`), (querySnapShot) => {
         let data = querySnapShot.val() || {};
         setDetails(data);
       });
@@ -100,12 +100,7 @@ const HealthRecord = ({ navigation }) => {
     if (details !== null && report != null) {
       if (details.DiagnosisOption === "EC") {
         let sex = details.Gender === "male" ? 1 : 2;
-        let calc =
-          61.1 -
-          11.1 * sex -
-          0.4 * details.Age -
-          0.2 * details.Weight -
-          0.2 * (report.GM.DC.DC_Total * 0.1);
+        let calc = 61.1 - 11.1 * sex - 0.4 * details.Age - 0.2 * details.Weight - 0.2 * (report.GM.DC.DC_Total * 0.1);
         setvo2(calc.toFixed(2));
       }
 
@@ -144,7 +139,7 @@ const HealthRecord = ({ navigation }) => {
         setvo2(calc.toFixed(2));
       }
     }
-  }, [details]);
+  }, [details, report]);
 
   const generatePdf = async () => {
     const file = await printToFileAsync({
@@ -201,6 +196,21 @@ const HealthRecord = ({ navigation }) => {
             {report && (
               <View>
                 <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
+                  <View style={{ width: "100%", paddingLeft: 12 }}>
+                    <Text
+                      style={[styles.h2, { width: "70%" }]}
+                    >
+                      Patient ID : {CPID}
+                    </Text>
+                    <Text
+                      style={[styles.h2, { width: "70%", marginTop: 12 }]}
+                    >
+                      Patient Name : {details.Name}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
                   <View style={{ width: "50%", alignItems: "center" }}>
                     <Text
                       style={[styles.h2, { textAlign: "center", width: "70%" }]}
@@ -219,32 +229,28 @@ const HealthRecord = ({ navigation }) => {
                   </View>
 
                   <View style={styles.colFlex}>
-                    <View>
-                      <Text
-                        style={[
-                          styles.h2,
-                          { textAlign: "center", marginTop: 8 },
-                        ]}
-                      >
-                        Resting
-                      </Text>
-                      <Text style={[styles.heading, { textAlign: "center" }]}>
-                        {report.PM.BP.BP_Avg}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text
-                        style={[
-                          styles.h2,
-                          { textAlign: "center", marginTop: 8 },
-                        ]}
-                      >
-                        Maximum
-                      </Text>
-                      <Text style={[styles.heading, { textAlign: "center" }]}>
-                        {report.PM.WP.WP_Peak}
-                      </Text>
-                    </View>
+                    <Text
+                      style={[
+                        styles.h2,
+                        { textAlign: "center", marginTop: 8 },
+                      ]}
+                    >
+                      Resting
+                    </Text>
+                    <Text style={[styles.heading, { textAlign: "center" }]}>
+                      {report.PM.BP.BP_Avg}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.h2,
+                        { textAlign: "center", marginTop: 8 },
+                      ]}
+                    >
+                      Maximum
+                    </Text>
+                    <Text style={[styles.heading, { textAlign: "center" }]}>
+                      {report.PM.WP.WP_Peak}
+                    </Text>
                   </View>
                 </View>
 

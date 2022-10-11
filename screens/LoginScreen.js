@@ -82,11 +82,11 @@ const LoginScreen = ({ navigation }) => {
     signInWithEmailAndPassword(authentication, user, pass)
       .then(() => {
         // alert("Login Successful with " + user);
-        const toast = Toast.show(`Login successful with ${user}!`, {
+        Toast.show(`Login successful with ${user}!`, {
           duration: 3000,
           shadow: true,
           backgroundColor: "#ffffff",
-          textColor: "#0000ff",
+          textColor: "#4BB543",
         });
         navigation.replace("Forms");
       })
@@ -120,7 +120,7 @@ const LoginScreen = ({ navigation }) => {
       style={styles.container}
     >
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1 }}>
+        <SafeAreaView edges={["left", "right"]} style={{ flex: 1 }}>
           <ScrollView style={styles.container}>
             <Image
               style={styles.imageCover}

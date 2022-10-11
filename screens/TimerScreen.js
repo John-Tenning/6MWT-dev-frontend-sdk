@@ -34,7 +34,7 @@ const TimerScreen = ({ navigation }) => {
               <Text style={styles.subtext}>Timer Screen</Text>
             </View>
 
-            <CustomTimer dur={120} timerName={"Resting"} cmd={"B"} />
+            <CustomTimer dur={3} timerName={"Resting"} cmd={"B"} />
             <CustomTimer dur={360} timerName={"Walking"} cmd={"W"} />
             <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
 
@@ -86,7 +86,7 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             let toast = null;
             onValue(ref(db, `/Reports/${pID}`), (querySnapShot) => {
               let data = querySnapShot.val() || {};
-              // console.log("Patient Data", data);
+              console.log("Patient Data", data);
               if (Object.keys(data).length === 0) {
                 toast = Toast.show("Patient Reports not found", {
                   duration: 3000,
@@ -111,7 +111,7 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
                         textColor: "#ff0000",
                       });
                     else
-                      Toast.show("Recovery Phase successfull.", {
+                      Toast.show("Resting Phase successfull.", {
                         duration: 3000,
                         backgroundColor: "#ffffff",
                         textColor: "#0000ff",
@@ -127,7 +127,7 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
                         textColor: "#ff0000",
                       });
                     else
-                      Toast.show("Recovery Phase successfull.", {
+                      Toast.show("Walking Phase successfull.", {
                         duration: 3000,
                         backgroundColor: "#ffffff",
                         textColor: "#0000ff",
@@ -153,7 +153,6 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
               },
               toast === null ? 0 : 3000
             );
-            Alert.alert(timerName + " Timer Complete");
           }}
         >
           {({ remainingTime, color }) => (
@@ -174,19 +173,23 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
               onPress={
                 isPlaying === false
                   ? () => {
-                      Alert.alert("Your timer will start in 5 seconds");
-                      update(ref(db, "/Device_Status/P01"), {
+                    Toast.show(`${timerName} timer will start in 5 seconds`, {
+                      duration: 5000,
+                      backgroundColor: "#ffffff",
+                      textColor: "#ff0000",
+                    });
+                    update(ref(db, "/Device_Status/P01"), {
+                      CMD: cmd,
+                    });
+                    if (cmd === "W") {
+                      update(ref(db, "/Device_Status/S01"), {
                         CMD: cmd,
                       });
-                      if (cmd === "W") {
-                        update(ref(db, "/Device_Status/S01"), {
-                          CMD: cmd,
-                        });
-                      }
-                      setTimeout(() => {
-                        setIsPlaying(true);
-                      }, 5000);
                     }
+                    setTimeout(() => {
+                      setIsPlaying(true);
+                    }, 5000);
+                  }
                   : () => setIsPlaying(false)
               }
             >
