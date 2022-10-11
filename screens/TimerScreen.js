@@ -34,7 +34,7 @@ const TimerScreen = ({ navigation }) => {
               <Text style={styles.subtext}>Timer Screen</Text>
             </View>
 
-            <CustomTimer dur={3} timerName={"Resting"} cmd={"B"} />
+            <CustomTimer dur={120} timerName={"Resting"} cmd={"B"} />
             <CustomTimer dur={360} timerName={"Walking"} cmd={"W"} />
             <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
 
@@ -83,76 +83,59 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
             setIsPlaying(false);
             console.log(timerName + " Timer Complete");
 
-            let toast = null;
-            onValue(ref(db, `/Reports/${pID}`), (querySnapShot) => {
-              let data = querySnapShot.val() || {};
-              console.log("Patient Data", data);
-              if (Object.keys(data).length === 0) {
-                toast = Toast.show("Patient Reports not found", {
-                  duration: 3000,
-                  backgroundColor: "#ffffff",
-                  textColor: "#ff0000",
-                });
-              }
-            });
+            if (cmd === "B") {
+              onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
+                let data = querySnapShot.val() || {};
+                if (
+                  Object.keys(data).length === 0 ||
+                  !Object.keys(data).includes("BP")
+                )
+                  Toast.show("Reports for Resting phase not found.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#ff0000",
+                  });
+                else
+                  Toast.show("Resting Phase successfull.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#0000ff",
+                  });
+              });
+            } else if (cmd === "W") {
+              onValue(ref(db, `/Reports/${pID}/GM`), (querySnapShot) => {
+                let data = querySnapShot.val() || {};
+                if (Object.keys(data).length === 0)
+                  Toast.show("Reports for Walking phase not found.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#ff0000",
+                  });
+                else
+                  Toast.show("Walking Phase successfull.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#0000ff",
+                  });
+              });
+            } else if (cmd === "R") {
+              onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
+                let data = querySnapShot.val() || {};
+                if (!Object.keys(data).includes("WP"))
+                  Toast.show("Reports for Recovery phase not found.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#ff0000",
+                  });
+                else
+                  Toast.show("Recovery Phase successfull.", {
+                    duration: 3000,
+                    backgroundColor: "#ffffff",
+                    textColor: "#0000ff",
+                  });
+              });
+            }
 
-            setTimeout(
-              () => {
-                if (cmd === "B") {
-                  onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
-                    let data = querySnapShot.val() || {};
-                    if (
-                      Object.keys(data).length === 0 ||
-                      !Object.keys(data).includes("BP")
-                    )
-                      Toast.show("Reports for Resting phase not found.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#ff0000",
-                      });
-                    else
-                      Toast.show("Resting Phase successfull.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#0000ff",
-                      });
-                  });
-                } else if (cmd === "W") {
-                  onValue(ref(db, `/Reports/${pID}/GM`), (querySnapShot) => {
-                    let data = querySnapShot.val() || {};
-                    if (Object.keys(data).length === 0)
-                      Toast.show("Reports for Walking phase not found.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#ff0000",
-                      });
-                    else
-                      Toast.show("Walking Phase successfull.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#0000ff",
-                      });
-                  });
-                } else if (cmd === "R") {
-                  onValue(ref(db, `/Reports/${pID}/PM`), (querySnapShot) => {
-                    let data = querySnapShot.val() || {};
-                    if (!Object.keys(data).includes("WP"))
-                      Toast.show("Reports for Recovery phase not found.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#ff0000",
-                      });
-                    else
-                      Toast.show("Recovery Phase successfull.", {
-                        duration: 3000,
-                        backgroundColor: "#ffffff",
-                        textColor: "#0000ff",
-                      });
-                  });
-                }
-              },
-              toast === null ? 0 : 3000
-            );
           }}
         >
           {({ remainingTime, color }) => (

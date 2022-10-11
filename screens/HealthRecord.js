@@ -44,6 +44,7 @@ const HealthRecord = ({ navigation }) => {
   const [CPID, setCPID] = useState(null);
   const [details, setDetails] = useState(null);
   const [vo2, setvo2] = useState(null);
+  const [finalReport, setFinalReport] = useState(null);
 
   const { pID, setPID } = useContext(PatientContext);
 
@@ -92,7 +93,6 @@ const HealthRecord = ({ navigation }) => {
       onValue(ref(db, `/Details/${CPID}/`), (querySnapShot) => {
         let data = querySnapShot.val() || {};
         setDetails(data);
-        console.log(details);
       });
     }
   }, [CPID]);
@@ -140,6 +140,11 @@ const HealthRecord = ({ navigation }) => {
         setvo2(calc.toFixed(2));
       }
 
+    }
+  }, [details, report]);
+
+  useEffect(() => {
+    if (vo2 !== null) {
       const nonZeroAvg = (...args) => {
         let sum = 0;
         let count = 0;
@@ -150,10 +155,10 @@ const HealthRecord = ({ navigation }) => {
         return Math.floor(sum / count);
       }
 
-      const finalReport = {
+      let fr = {
         PatientName: details.Name,
         Age: details.Age,
-        PatientID: details.PatientID,
+        PatientID: details.Patient_Id,
         Gender: details.Gender,
         DiagnosisOption: diagnosisDict[details.DiagnosisOption],
         RHR: report.PM.BP.BP_Avg,
@@ -166,8 +171,9 @@ const HealthRecord = ({ navigation }) => {
         VO2: vo2,
       }
 
+      setFinalReport(fr);
     }
-  }, [details, report]);
+  }, [vo2])
 
   const generatePdf = async () => {
     const file = await printToFileAsync({
@@ -175,7 +181,7 @@ const HealthRecord = ({ navigation }) => {
       base64: false,
     });
 
-    const pdfName = `${FileSystem.documentDirectory}${details.PatientID}_Report.pdf`;
+    const pdfName = `${FileSystem.documentDirectory}${finalReport.PatientID}_Report.pdf`;
 
     await FileSystem.moveAsync({
       from: file.uri,
@@ -195,7 +201,7 @@ const HealthRecord = ({ navigation }) => {
               <Text style={styles.subtext}>
                 Here is a summary of your details
               </Text>
-              {!report && (
+              {(!report || !details || !finalReport) && (
                 <View style={{ alignItems: "center", marginTop: 64 }}>
                   <Image
                     style={{ width: 125, height: 125, color: "#303030" }}
@@ -207,19 +213,19 @@ const HealthRecord = ({ navigation }) => {
                 </View>
               )}
             </View>
-            {report && details && (
+            {report && details && finalReport && (
               <View>
                 <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
                   <View style={{ width: "100%", paddingLeft: 12 }}>
                     <Text
                       style={[styles.h2, { width: "70%" }]}
                     >
-                      Patient ID : {CPID}
+                      Patient ID : {finalReport.PatientID}
                     </Text>
                     <Text
                       style={[styles.h2, { width: "70%", marginTop: 12 }]}
                     >
-                      Patient Name : {details.Name}
+                      Patient Name : {finalReport.PatientName}
                     </Text>
                   </View>
                 </View>
@@ -238,7 +244,7 @@ const HealthRecord = ({ navigation }) => {
                       }}
                     ></Image>
                     <Text style={[styles.heading, { textAlign: "center" }]}>
-                      {report.PM.WP.WP_Avg}
+                      {finalReport.AHR}
                     </Text>
                   </View>
 
@@ -252,7 +258,7 @@ const HealthRecord = ({ navigation }) => {
                       Resting
                     </Text>
                     <Text style={[styles.heading, { textAlign: "center" }]}>
-                      {report.PM.BP.BP_Avg}
+                      {finalReport.RHR}
                     </Text>
                     <Text
                       style={[
@@ -263,7 +269,7 @@ const HealthRecord = ({ navigation }) => {
                       Maximum
                     </Text>
                     <Text style={[styles.heading, { textAlign: "center" }]}>
-                      {report.PM.WP.WP_Peak}
+                      {finalReport.MHR}
                     </Text>
                   </View>
                 </View>
@@ -288,7 +294,7 @@ const HealthRecord = ({ navigation }) => {
                         1 Min
                       </Text>
                       <Text style={[styles.heading, { textAlign: "center" }]}>
-                        {report.PM.RP.RP_3}
+                        {finalReport.RR1}
                       </Text>
                       <Text style={[styles.h2, { textAlign: "center" }]}>
                         BPS
@@ -299,7 +305,7 @@ const HealthRecord = ({ navigation }) => {
                         2 Mins
                       </Text>
                       <Text style={[styles.heading, { textAlign: "center" }]}>
-                        {report.PM.RP.RP_6}
+                        {finalReport.RR2}
                       </Text>
                       <Text style={[styles.h2, { textAlign: "center" }]}>
                         BPS
@@ -310,7 +316,7 @@ const HealthRecord = ({ navigation }) => {
                         3 Mins
                       </Text>
                       <Text style={[styles.heading, { textAlign: "center" }]}>
-                        {report.PM.RP.RP_9}
+                        {finalReport.RR3}
                       </Text>
                       <Text style={[styles.h2, { textAlign: "center" }]}>
                         BPS
@@ -336,7 +342,7 @@ const HealthRecord = ({ navigation }) => {
                         { textAlign: "center", fontSize: 36 },
                       ]}
                     >
-                      {report.GM.DC.DC_Total}
+                      {finalReport.DC}
                     </Text>
                     <Text style={[styles.h2, { textAlign: "center" }]}>
                       Meters
@@ -352,7 +358,7 @@ const HealthRecord = ({ navigation }) => {
                         { textAlign: "center", fontSize: 36 },
                       ]}
                     >
-                      {vo2}
+                      {finalReport.VO2}
                     </Text>
                   </View>
                 </View>
