@@ -92,6 +92,7 @@ const HealthRecord = ({ navigation }) => {
       onValue(ref(db, `/Details/${CPID}/`), (querySnapShot) => {
         let data = querySnapShot.val() || {};
         setDetails(data);
+        console.log(details);
       });
     }
   }, [CPID]);
@@ -138,12 +139,18 @@ const HealthRecord = ({ navigation }) => {
           0.191 * details.Age;
         setvo2(calc.toFixed(2));
       }
-    }
-  }, [details, report]);
 
-  const generatePdf = async () => {
-    const file = await printToFileAsync({
-      html: template({
+      const nonZeroAvg = (...args) => {
+        let sum = 0;
+        let count = 0;
+        args.forEach(arg => {
+          sum += arg;
+          count += arg === 0 ? 0 : 1;
+        })
+        return Math.floor(sum / count);
+      }
+
+      const finalReport = {
         PatientName: details.Name,
         Age: details.Age,
         PatientID: details.PatientID,
@@ -152,12 +159,19 @@ const HealthRecord = ({ navigation }) => {
         RHR: report.PM.BP.BP_Avg,
         MHR: report.PM.WP.WP_Peak,
         AHR: report.PM.WP.WP_Avg,
-        RR1: report.PM.RP.RP_3,
-        RR2: report.PM.RP.RP_6,
-        RR3: report.PM.RP.RP_9,
+        RR1: report.PM.RP.RP_3 !== 0 ? report.PM.RP.RP_3 : nonZeroAvg(report.PM.RP.RP_1, report.PM.RP.RP_2),
+        RR2: report.PM.RP.RP_6 !== 0 ? report.PM.RP.RP_6 : nonZeroAvg(report.PM.RP.RP_4, report.PM.RP.RP_5),
+        RR3: report.PM.RP.RP_9 !== 0 ? report.PM.RP.RP_9 : nonZeroAvg(report.PM.RP.RP_7, report.PM.RP.RP_8),
         DC: report.GM.DC.DC_Total,
         VO2: vo2,
-      }),
+      }
+
+    }
+  }, [details, report]);
+
+  const generatePdf = async () => {
+    const file = await printToFileAsync({
+      html: template(finalReport),
       base64: false,
     });
 
@@ -193,7 +207,7 @@ const HealthRecord = ({ navigation }) => {
                 </View>
               )}
             </View>
-            {report && (
+            {report && details && (
               <View>
                 <View style={[styles.rowFlex, { paddingHorizontal: 16 }]}>
                   <View style={{ width: "100%", paddingLeft: 12 }}>
