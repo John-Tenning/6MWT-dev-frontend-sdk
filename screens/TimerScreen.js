@@ -34,9 +34,9 @@ const TimerScreen = ({ navigation }) => {
               <Text style={styles.subtext}>Timer Screen</Text>
             </View>
 
-            <CustomTimer dur={12} timerName={"Resting"} cmd={"B"} />
-            <CustomTimer dur={36} timerName={"Walking"} cmd={"W"} />
-            <CustomTimer dur={18} timerName={"Recovery"} cmd={"R"} />
+            <CustomTimer dur={120} timerName={"Resting"} cmd={"B"} />
+            <CustomTimer dur={360} timerName={"Walking"} cmd={"W"} />
+            <CustomTimer dur={180} timerName={"Recovery"} cmd={"R"} />
 
             <Pressable
               style={styles.nextButton}
@@ -175,16 +175,16 @@ const CustomTimer = ({ dur, timerName, cmd }) => {
                 isPlaying === false
                   ? () => {
                       Alert.alert("Your timer will start in 5 seconds");
-                      setTimeout(() => {
-                        setIsPlaying(true);
-                        update(ref(db, "/Device_Status/P01"), {
+                      update(ref(db, "/Device_Status/P01"), {
+                        CMD: cmd,
+                      });
+                      if (cmd === "W") {
+                        update(ref(db, "/Device_Status/S01"), {
                           CMD: cmd,
                         });
-                        if (cmd === "W") {
-                          update(ref(db, "/Device_Status/S01"), {
-                            CMD: cmd,
-                          });
-                        }
+                      }
+                      setTimeout(() => {
+                        setIsPlaying(true);
                       }, 5000);
                     }
                   : () => setIsPlaying(false)

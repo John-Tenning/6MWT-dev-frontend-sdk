@@ -17,6 +17,8 @@ import { signOut } from "firebase/auth";
 import { ref, onValue, push, update, remove, set } from "firebase/database";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PatientContext } from "../App";
+import Toast from "react-native-root-toast";
+
 
 const image2 = {
   uri: "https://raw.githubusercontent.com/John-Tenning/6MWT-dev-frontend-sdk/main/assets/bgGradient4.png",
@@ -84,7 +86,12 @@ const Forms = ({ navigation }) => {
   const handleSignOut = () => {
     signOut(authentication)
       .then(() => {
-        alert("Sign Out Successful");
+        // alert("Sign Out Successful");
+        Toast.show("Sign Out successful", {
+          duration: 3000,
+          backgroundColor: "#ffffff",
+          textColor: "#ff0000",
+        });
         navigation.replace("Login");
       })
       .catch((error) => {

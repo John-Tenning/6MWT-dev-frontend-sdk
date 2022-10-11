@@ -141,7 +141,7 @@ const LoginScreen = ({ navigation }) => {
                     errorState={[errorPass, setErrorPass]}
                     placeholder="Password"
                     isSecure={passwordVisibility}
-                    passw
+                    passw = "true"
                   />
                   <Pressable onPress={handlePasswordVisibility}>
                     <MaterialCommunityIcons
@@ -219,9 +219,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageCover: {
-    // paddingLeft: 0,
-    height: 475,
-    width: 390,
+    marginHorizontal: 0,
+    height: 490,
+    width: 420,
     flex: 1,
     marginTop: -56,
   },
