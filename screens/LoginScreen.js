@@ -53,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
     createUserWithEmailAndPassword(authentication, user, pass)
       .then(() => {
         alert("New user " + user + " created");
-        navigation.replace("Forms");
+        navigation.replace("Record");
       })
       .catch((error) => {
         alert(error.message);
@@ -88,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
           backgroundColor: "#ffffff",
           textColor: "#4BB543",
         });
-        navigation.replace("Forms");
+        navigation.replace("Record");
       })
       .catch((error) => {
         // alert(error.message);

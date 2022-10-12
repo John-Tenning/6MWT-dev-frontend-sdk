@@ -383,7 +383,7 @@ const HealthRecord = ({ navigation }) => {
                 <Pressable
                   style={styles.button}
                   onPress={() => {
-                    navigation.replace("Forms");
+                    navigation.replace("Record");
                   }}
                 >
                   <Text style={styles.buttonText}>Next Patient</Text>

@@ -12,8 +12,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDropDown from "../components/CustomDropDown";
-import { authentication, db } from "../firebase-config";
-import { signOut } from "firebase/auth";
+import { db } from "../firebase-config";
 import { ref, onValue, push, update, remove, set } from "firebase/database";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PatientContext } from "../App";
@@ -82,22 +81,6 @@ const Forms = ({ navigation }) => {
     { label: "Yes", value: "yes" },
     { label: "No", value: "no" },
   ];
-
-  const handleSignOut = () => {
-    signOut(authentication)
-      .then(() => {
-        // alert("Sign Out Successful");
-        Toast.show("Sign Out successful", {
-          duration: 3000,
-          backgroundColor: "#ffffff",
-          textColor: "#4BB543",
-        });
-        navigation.replace("Login");
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
 
   return (
     <KeyboardAvoidingView
@@ -247,10 +230,6 @@ const Forms = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.buttonText}>Submit</Text>
-              </Pressable>
-
-              <Pressable style={styles.button} onPress={handleSignOut}>
-                <Text style={styles.buttonText}>Sign Out</Text>
               </Pressable>
             </View>
           </ScrollView>

@@ -7,6 +7,7 @@ import LoginScreen from "./screens/LoginScreen";
 import Forms from "./screens/Forms";
 import TimerScreen from "./screens/TimerScreen";
 import HealthRecord from "./screens/HealthRecord";
+import PatientRecord from "./screens/PatientRecord";
 import { RootSiblingParent as ToastContainer } from "react-native-root-siblings";
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const App = () => {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Record" component={PatientRecord} />
             <Stack.Screen name="Forms" component={Forms} />
             <Stack.Screen name="Timer" component={TimerScreen} />
             <Stack.Screen name="Health" component={HealthRecord} />
