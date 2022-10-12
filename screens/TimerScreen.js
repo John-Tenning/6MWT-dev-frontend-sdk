@@ -7,7 +7,7 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { db } from "../firebase-config.js";
 import { ref, onValue, push, update, remove } from "firebase/database";
 // Reference: https://openbase.com/js/react-native-countdown-circle-timer
@@ -24,6 +24,18 @@ const image2 = {
 const image = require("../assets/bgGradient4.png");
 
 const TimerScreen = ({ navigation }) => {
+
+  const {pID, setPID} = useContext(PatientContext);
+
+  useEffect(() => {
+    update(ref(db, "/Device_Status/P01"), {
+      CPID: pID,
+    });
+    update(ref(db, "/Device_Status/S01"), {
+      CPID: pID,
+    });
+  }, [])
+
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <SafeAreaView edges={["right", "left", "top"]} style={{ flex: 1 }}>

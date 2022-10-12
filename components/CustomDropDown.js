@@ -71,6 +71,7 @@ const CustomDropDown = ({
       onBlur={() => setIsFocus(false)}
       onChange={(item) => {
         setValue(item.value);
+        setError(false);
         setIsFocus(false);
       }}
     />

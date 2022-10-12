@@ -48,6 +48,8 @@ const HealthRecord = ({ navigation }) => {
 
   const { pID, setPID } = useContext(PatientContext);
 
+  const [loadingEnded, setLoadingEnded] = useState(false);
+
   useEffect(() => {
     onValue(ref(db, `/Reports/${pID}`), (querySnapShot) => {
       let data = querySnapShot.val() || {};
@@ -58,19 +60,15 @@ const HealthRecord = ({ navigation }) => {
         data?.PM?.WP &&
         data?.GM
       ) {
-        update(ref(db, "/Device_Status/P01"), {
-          CPID: pID,
-        });
-        update(ref(db, "/Device_Status/S01"), {
-          CPID: pID,
+        update(ref(db, "/PreviousSuccess"), {
+          PID: pID,
         });
         setCPID(pID);
       } else {
-        onValue(ref(db, `/Device_Status/P01/CPID`), (querySnapShot) => {
-          let data = querySnapShot.val() || {};
-          setCPID(data);
-          console.log(`CPID: ${data}`);
-        });
+        Toast.show("Data not found", {
+          textColor: "#ff00000",
+          backgroundColor: "#ffffff"
+        })
       }
     });
   }, []);
@@ -158,7 +156,7 @@ const HealthRecord = ({ navigation }) => {
       let fr = {
         PatientName: details.Name,
         Age: details.Age,
-        PatientID: details.Patient_Id,
+        PatientID: details.PatientID,
         Gender: details.Gender,
         DiagnosisOption: diagnosisDict[details.DiagnosisOption],
         RHR: report.PM.BP.BP_Avg,
@@ -191,6 +189,14 @@ const HealthRecord = ({ navigation }) => {
     await shareAsync(pdfName);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      if(!(CPID && report && details && finalReport)){
+        setLoadingEnded(true);
+      }
+    }, 10000)
+  }, [])
+
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <SafeAreaView edges={["right", "left", "top"]} style={{ flex: 1 }}>
@@ -203,12 +209,12 @@ const HealthRecord = ({ navigation }) => {
               </Text>
               {(!report || !details || !finalReport) && (
                 <View style={{ alignItems: "center", marginTop: 64 }}>
-                  <Image
+                  {!loadingEnded && <Image
                     style={{ width: 125, height: 125, color: "#303030" }}
                     source={loadImage}
-                  ></Image>
+                  ></Image>}
                   <Text style={[styles.h2, { textAlign: "center" }]}>
-                    Loading...
+                    {!loadingEnded ?  "Loading..." : "Data unavailable."}
                   </Text>
                 </View>
               )}
@@ -372,6 +378,8 @@ const HealthRecord = ({ navigation }) => {
                 >
                   <Text style={styles.buttonText}>Generate Report</Text>
                 </Pressable>
+              </View>
+            )}
                 <Pressable
                   style={styles.button}
                   onPress={() => {
@@ -380,8 +388,6 @@ const HealthRecord = ({ navigation }) => {
                 >
                   <Text style={styles.buttonText}>Next Patient</Text>
                 </Pressable>
-              </View>
-            )}
           </View>
         </ScrollView>
       </SafeAreaView>

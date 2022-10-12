@@ -197,10 +197,10 @@ const Forms = ({ navigation }) => {
                   gender === null
                     ? (setErrorGender(true), count++)
                     : setErrorGender(false);
-                  isNaN(+weight) || weight === null
+                  isNaN(+weight) || weight === null || weight.length <= 0
                     ? (setErrorWeight(true), count++)
                     : setErrorWeight(false);
-                  isNaN(+height) || height === null
+                  isNaN(+height) || height === null || height.length <= 0
                     ? (setErrorHeight(true), count++)
                     : setErrorHeight(false);
                   diagnosis.length <= 0
